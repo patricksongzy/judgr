@@ -1,9 +1,9 @@
-class SubmissionPolicy
-  attr_accessor :user, :submission
+class ProblemPolicy
+  attr_accessor :user, :problem
 
-  def initialize(user, submission)
+  def initialize(user, problem)
     @user = user
-    @submission = submission
+    @problem = problem
   end
 
   class Scope
@@ -13,16 +13,15 @@ class SubmissionPolicy
     end
 
     def resolve
-      scope.where(user: @user)
+      scope
     end
 
     private
-    
+
     attr_reader :user, :scope
   end
 
-  def create?
-    user.present?
+  def show?
+    true
   end
 end
-

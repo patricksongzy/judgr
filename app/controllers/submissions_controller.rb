@@ -1,9 +1,5 @@
 class SubmissionsController < ApplicationController
   include SubmissionsHelper
-
-  def index
-    @submissions = Submission.all
-  end
   
   def show
     @submission = policy_scope(Submission).find(params[:id])
@@ -11,11 +7,12 @@ class SubmissionsController < ApplicationController
 
   def create
     @submission = Submission.new(submission_params)
+    authorize @submission
     @submission.problem_id = params[:problem_id]
     @submission.user_id = current_user.id
 
     @submission.save!
 
-    redirect_to problem_submissions_path(@submission)
+    redirect_to problem_submission_path(params[:problem_id], @submission)
   end
 end
