@@ -1,0 +1,8 @@
+<% if policy_scope(@problem.submissions).length > 0 %>
+  <h1>Submissions</h1>
+  <% policy_scope(@problem.submissions).each do |submission| %>
+    <li>
+      <%= link_to submission.id, problem_submission_path(@problem, submission) %>
+    </li>
+  <% end %>
+<% end %>
