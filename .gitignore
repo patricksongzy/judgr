@@ -68,3 +68,4 @@ yarn-debug.log*
 
 /config/local_env.yml
 /submissions/*
+/datasets/*

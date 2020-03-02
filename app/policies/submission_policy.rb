@@ -21,6 +21,10 @@ class SubmissionPolicy
     attr_reader :user, :scope
   end
 
+  def show?
+    user.present? and user == submission.user
+  end
+
   def create?
     user.present?
   end

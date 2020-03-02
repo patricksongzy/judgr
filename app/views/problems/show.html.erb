@@ -3,6 +3,12 @@
   <%= @problem.description %>
 </p>
 
-<%= render partial: 'submissions/submission' %>
+<% if policy_scope(@problem.submissions).length > 0 %>
+  <h1>Submissions</h1>
+  <ul>
+    <%= render partial: 'submissions/submission', collection: policy_scope(@problem.submissions) %>
+  </ul>
+<% end %>
+
 <%= render partial: 'submissions/form' %>
 

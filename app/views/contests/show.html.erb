@@ -1,0 +1,7 @@
+<h1><%= @contest.name %></h1>
+<ul>
+  <%= render partial: 'problems/problem', collection: @contest.problems %>
+</ul>
+
+<%= render partial: 'submissions/form' %>
+
