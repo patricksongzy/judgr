@@ -1,0 +1,16 @@
+<h1>Create Contest</h1>
+<%= form_for [:admin, @contest] do |f| %>
+  <ul>
+    <% @contest.errors.full_messages.each do |error| %>
+      <li><%= error %></li>
+    <% end %>
+  </ul>
+  <p>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+

@@ -67,3 +67,5 @@ yarn-debug.log*
 !/storage/.keep
 
 /config/local_env.yml
+/submissions/*
+/datasets/*

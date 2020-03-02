@@ -6,11 +6,5 @@ class CreateTestBatches < ActiveRecord::Migration[6.0]
       
       t.timestamps
     end
-
-    create_table :test_batches do |t|
-      t.belongs_to :problem
-
-      t.timestamps
-    end
   end
 end

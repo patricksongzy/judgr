@@ -1,22 +1,32 @@
 <% if policy(@submission).create? %>
-  <h1>New Submission</h1>
-
-  <%= form_for [ @problem, @submission ] do |f| %>
-    <ul>
-      <% @submission.errors.full_messages.each do |error| %>
-        <li><%= error %></li>
+  <h2>Create Submission</h2>
+  <% if @contest.problems.empty? %>
+    <p>No problems currently in contest.</p>
+  <% else %>
+    <%= form_for @submission do |f| %>
+      <ul>
+        <% @submission.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+      <% if @problem.nil? %>
+        <%= f.label :problem_id %><br />
+        <%= f.collection_select :problem_id, @contest.problems, :id, :name, include_blank: false %>
+      <% else %>
+        <%= f.hidden_field :problem_id, :value => @problem.id %>
       <% end %>
-    </ul>
-    <p>
-      <%= f.collection_select :language_id, Language.order(:name), :id, :name, include_blank: false %>
-    </p>
-    <p>
-      <%= f.label :code %><br />
-      <%= f.text_area :code %>
-    </p>
-    <p>
-      <%= f.submit %>
-    </p>
+      <p>
+        <%= f.label :language_id %><br />
+        <%= f.collection_select :language_id, Language.order(:name), :id, :name, include_blank: false %>
+      </p>
+      <p>
+        <%= f.label :code %><br />
+        <%= f.text_area :code %>
+      </p>
+      <p>
+        <%= f.submit %>
+      </p>
+    <% end %>
   <% end %>
 <% end %>
 
