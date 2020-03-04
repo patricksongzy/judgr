@@ -8,6 +8,12 @@
       <td>
         <%= link_to contest.name, contest_path(contest) %>
       </td>
+      <td>
+        <%= button_to "Edit", edit_admin_contest_path(contest), method: :get %>
+      </td>
+      <td>
+        <%= button_to "Delete", admin_contest_path(contest), method: :delete %>
+      </td>
     </tr>
   <% end %>
 </table>

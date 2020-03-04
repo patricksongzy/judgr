@@ -1,6 +1,13 @@
 class Admin::ProblemsController < ApplicationController
-  def new
-    @problem = Problem.new
-    authorize @problem
+  include ProblemsHelper
+
+  def create
+    @problem = Problem.new(problem_params)
+    authorize [:admin, @problem]
+
+    @problem.contest_id = params[:contest_id]
+    @problem.save!
+
+    redirect_to problem_path(@problem)
   end
 end

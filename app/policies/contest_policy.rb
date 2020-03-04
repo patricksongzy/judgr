@@ -9,7 +9,7 @@ class ContestPolicy
   class Scope
     def initialize(user, scope)
       @user = user
-      @scope = scope
+      @scope = scope.is_a?(Array) ? scope.last : scope
     end
 
     def resolve
@@ -19,14 +19,6 @@ class ContestPolicy
     private
 
     attr_reader :user, :scope
-  end
-
-  def new?
-    user.admin?
-  end
-
-  def create?
-    user.admin?
   end
 
   def show?

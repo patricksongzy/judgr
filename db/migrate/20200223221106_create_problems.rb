@@ -1,4 +1,4 @@
-class CreateTestBatches < ActiveRecord::Migration[6.0]
+class CreateProblems < ActiveRecord::Migration[6.0]
   def change
     create_table :problems do |t|
       t.string :name
