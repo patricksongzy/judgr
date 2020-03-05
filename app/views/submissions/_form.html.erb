@@ -1,22 +1,48 @@
 <% if policy(@submission).create? %>
-  <h1>New Submission</h1>
-
-  <%= form_for [ @problem, @submission ] do |f| %>
-    <ul>
-      <% @submission.errors.full_messages.each do |error| %>
-        <li><%= error %></li>
+  <div class="box">
+    <h2 class="title is-4">Create Submission</h2>
+    <% if @contest.problems.empty? %>
+      <p>No problems currently in contest.</p>
+    <% else %>
+      <%= form_for @submission do |f| %>
+        <ul>
+          <% @submission.errors.full_messages.each do |error| %>
+            <li><%= error %></li>
+          <% end %>
+        </ul>
+        <% if @problem.nil? %>
+          <div class="field">
+            <%= f.label :problem_id, class: "label" %>
+            <div class="control">
+              <div class="select">
+                <%= f.collection_select :problem_id, @contest.problems, :id, :name, include_blank: false %>
+              </div>
+            </div>
+          </div>
+        <% else %>
+          <%= f.hidden_field :problem_id, :value => @problem.id %>
+        <% end %>
+        <div class="field">
+          <%= f.label :language_id, class: "label" %>
+          <div class="control">
+            <div class="select">
+              <%= f.collection_select :language_id, Language.order(:name), :id, :name, include_blank: false %>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <%= f.label :code, class: "label" %>
+          <div class="control">
+            <%= f.text_area :code, class: "textarea code" %>
+          </div>
+        </div>
+        <div class="field">
+          <div class="control">
+            <%= f.submit class: "button is-primary" %>
+          </div>
+        </div>
       <% end %>
-    </ul>
-    <p>
-      <%= f.collection_select :language_id, Language.order(:name), :id, :name, include_blank: false %>
-    </p>
-    <p>
-      <%= f.label :code %><br />
-      <%= f.text_area :code %>
-    </p>
-    <p>
-      <%= f.submit %>
-    </p>
-  <% end %>
+    <% end %>
+  </div>
 <% end %>
 

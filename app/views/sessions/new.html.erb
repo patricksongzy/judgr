@@ -1,6 +1,18 @@
-<div id="clearance" class="sign-in">
-  <h2><%= t(".title") %></h2>
-
-  <%= render partial: '/sessions/form' %>
-
+<div class="columns is-centered">
+  <div class="column is-half">
+    <div id="clearance" class="sign-in box">
+      <h1 class="title"><%= t(".title") %></h1>
+      <%= form_for :session, url: session_path do |form| %>
+        <%= render partial: 'sessions/form', object: form %>
+        
+        <div class="other-links">
+          <% if Clearance.configuration.allow_sign_up? %>
+            <%= link_to t(".sign_up"), sign_up_path %> or
+          <% end %>
+          <%= link_to t(".forgot_password"), new_password_path %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
+
