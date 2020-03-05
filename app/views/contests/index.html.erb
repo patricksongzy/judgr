@@ -1,0 +1,14 @@
+<h1 class="title">Contests</h1>
+<table class="table">
+  <tr>
+    <th>Contest Name</th>
+  </tr>
+  <% @contests.each do |contest| %>
+    <tr>
+      <td>
+        <%= link_to contest.name, contest_path(contest) %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+

@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_24_201313) do
+ActiveRecord::Schema.define(version: 2020_03_01_045709) do
+
+  create_table "contests", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+  end
 
   create_table "languages", force: :cascade do |t|
     t.string "name"
+    t.string "extension"
   end
 
   create_table "problems", force: :cascade do |t|
@@ -21,6 +28,8 @@ ActiveRecord::Schema.define(version: 2020_02_24_201313) do
     t.text "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "contest_id"
+    t.index ["contest_id"], name: "index_problems_on_contest_id"
   end
 
   create_table "submissions", force: :cascade do |t|
@@ -49,10 +58,12 @@ ActiveRecord::Schema.define(version: 2020_02_24_201313) do
     t.string "encrypted_password", limit: 128, null: false
     t.string "confirmation_token", limit: 128
     t.string "remember_token", limit: 128, null: false
+    t.integer "role"
     t.index ["email"], name: "index_users_on_email"
     t.index ["remember_token"], name: "index_users_on_remember_token"
   end
 
+  add_foreign_key "problems", "contests"
   add_foreign_key "submissions", "languages"
   add_foreign_key "submissions", "problems"
   add_foreign_key "submissions", "users"

@@ -1,15 +1,15 @@
-class ProblemPolicy
-  attr_accessor :user, :problem
+class ContestPolicy 
+  attr_accessor :user, :contest
 
-  def initialize(user, problem)
+  def initialize(user, contest)
     @user = user
-    @problem = problem
+    @contest = contest
   end
 
   class Scope
     def initialize(user, scope)
       @user = user
-      @scope = scope
+      @scope = scope.is_a?(Array) ? scope.last : scope
     end
 
     def resolve
@@ -23,13 +23,5 @@ class ProblemPolicy
 
   def show?
     true
-  end
-
-  def new?
-    user.admin?
-  end
-  
-  def create?
-    user.admin?
   end
 end

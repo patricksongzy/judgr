@@ -55,3 +55,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'irb'
 gem 'clearance', '~> 2.1'
 gem 'pundit', '~>2.1'
+gem 'bulma-rails', '~>0.8'
