@@ -10,20 +10,33 @@
   </head>
 
   <body>
-    <%= yield %>
-    <p>
-      <% if signed_in? %>
-        Signed in as: <%= current_user.email %>
-        <%= button_to 'Sign out', sign_out_path, method: :delete %>
-      <% else %>
-        <%= link_to 'Sign in', sign_in_path %>
-      <% end %>
-      
-      <div id="flash">
-        <% flash.each do |key, value| %>
-          <div class="flash <%= key %>"><%= value %></div>
-        <% end %>
+    <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
+      <div class="container">
+        <div class="navbar-brand">
+          <h1 class="navbar-item">
+            <strong>Judgr</strong>
+          </h1>
+        </div>
+        <div class="navbar-menu">
+          <div class="navbar-start">
+            <%= link_to "Contests", contests_path, class: "navbar-item" %>
+          </div>
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <% if signed_in? %>
+                <%= link_to 'Sign out', sign_out_path, method: :delete, class: "button is-light" %>
+              <% else %>
+                <%= link_to 'Sign in', sign_in_path, class: "button is-light" %>
+              <% end %>
+            </div>
+          </div>
+        </div>
       </div>
-    </p>
+    </nav>
+    <section class="section">
+      <div class="container">
+        <%= yield %>
+      </div>
+    </section>
   </body>
 </html>

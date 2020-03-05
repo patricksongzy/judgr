@@ -1,5 +1,5 @@
-<h1>Contests</h1>
-<table>
+<h1 class="title">Contests</h1>
+<table class="table">
   <tr>
     <th>Contest Name</th>
   </tr>
@@ -9,12 +9,15 @@
         <%= link_to contest.name, contest_path(contest) %>
       </td>
       <td>
-        <%= button_to "Edit", edit_admin_contest_path(contest), method: :get %>
+        <%= button_to "Edit", edit_admin_contest_path(contest), method: :get, class: "button"%>
       </td>
       <td>
-        <%= button_to "Delete", admin_contest_path(contest), method: :delete %>
+        <%= button_to "Delete", admin_contest_path(contest), method: :delete, class: "button"%>
       </td>
     </tr>
   <% end %>
 </table>
+
+<h2>Create Contest</h2>
+<%= render partial: 'admin/contests/form', :locals => {contest: @contest} %>
 

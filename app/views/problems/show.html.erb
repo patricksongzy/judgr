@@ -1,4 +1,4 @@
-<h1><%= @problem.name %></h1>
+<h1 class="title"><%= @problem.name %></h1>
 <p>
   <%= @problem.description %>
 </p>
@@ -10,5 +10,7 @@
   </ul>
 <% end %>
 
-<%= render partial: 'submissions/form' %>
+<section class="section">
+  <%= render partial: 'submissions/form' %>
+</section>
 

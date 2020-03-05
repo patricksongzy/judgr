@@ -1,8 +1,13 @@
 class Admin::ContestsController < ApplicationController
   include ContestsHelper
 
+  before_action :require_login
+
   def index
     @contests = Contest.all
+    authorize [:admin, @contests]
+
+    @contest = Contest.new
     authorize [:admin, @contests]
   end
   
@@ -40,5 +45,8 @@ class Admin::ContestsController < ApplicationController
   def destroy
     @contest = Contest.find(params[:id])
     authorize [:admin, @contest]
+
+    @contest.destroy
+    redirect_to action: "index"
   end
 end

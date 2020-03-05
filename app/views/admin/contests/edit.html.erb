@@ -1,38 +1,62 @@
-<h1><%= @contest.name %></h1>
+<h1 class="title"><%= @contest.name %></h1>
 
-<h2>Problems</h2>
-<table>
-  <tr>
-    <th>Problem Name</th>
-  </tr>
-  <% for problem in @contest.problems %>
-    <tr>
-      <%= render partial: 'problems/problem', locals: {problem: problem} %>
-      <td><%= button_to "Edit", edit_admin_contest_problem_path(problem), method: :get %></td>
-      <td><%= button_to "Delete", admin_contest_problem_path(problem), method: :delete %></td>
-    </tr>
+<div class="container">
+  <h2 class="title is-4">Problems</h2>
+  <table class="table is-hoverable is-fullwidth">
+    <thead>
+      <tr>
+        <th>Problem Name</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for problem in @contest.problems %>
+        <tr>
+          <%= render partial: 'problems/problem', locals: {problem: problem} %>
+          <td>
+            <%= button_to "Edit", edit_admin_contest_problem_path(problem), method: :get, class: "button" %>
+          </td>
+          <td>
+            <%= button_to "Delete", admin_contest_problem_path(problem), method: :delete, class: "button is-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<section class="section">
+<div class="box">
+  <h2 class="title is-4">Edit Name</h2>
+  <%= render partial: 'admin/contests/form' %> 
+</div>
+
+<div class="box">
+  <h2 class="title is-4">Add Problem</h2>
+  <%= form_for [:admin, @contest, @problem] do |f| %>
+    <ul>
+      <% @contest.errors.full_messages.each do |error| %>
+        <li><%= error %></li>
+      <% end %>
+    </ul>
+    <div class="field">
+      <%= f.label :name, class: "label" %>
+      <div class="control">
+        <%= f.text_field :name, class: "input" %>
+      </div>
+    </div>
+    <div class="field">
+      <%= f.label :description, class: "label" %>
+      <div class="control">
+        <%= f.text_area :description, class: "textarea"%>
+      </div>
+    </div>
+    <div class="field">
+      <div class="control">
+        <%= f.submit class: "button is-primary" %>
+      </div>
+    </div>
   <% end %>
-</table>
-
-<h2>Edit Name</h2>
-<%= render partial: 'admin/contests/form' %> 
-
-<h2>Add Problem</h2>
-<%= form_for [:admin, @contest, @problem] do |f| %>
-  <ul>
-    <% @contest.errors.full_messages.each do |error| %>
-      <li><%= error %></li>
-    <% end %>
-  </ul>
-  <p>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :description %>
-    <%= f.text_area :description %>
-  </p>
-  <p>
-    <%= f.submit %>
-  </p>
-<% end %>
+</div>
+</section>

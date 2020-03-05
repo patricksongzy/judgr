@@ -1,18 +1,21 @@
-<h1><%= @contest.name %></h1>
-<%# <ul> %>
-<%#   <%= render partial: 'problems/problem', collection: @contest.problems %1> %>
-<%# </ul> %>
-
-<table>
-  <tr>
-    <th>Problem Name</th>
-  </tr>
-  <% for problem in @contest.problems %>
+<h1 class="title"><%= @contest.name %></h1>
+<h1 class="title is-4">Problems</h1>
+<table class="table is-hoverable is-fullwidth">
+  <thead>
     <tr>
-      <%= render partial: 'problems/problem', locals: {problem: problem} %>
+      <th>Problem Name</th>
     </tr>
-  <% end %>
+  </thead>
+  <tbody>
+    <% for problem in @contest.problems %>
+      <tr>
+        <%= render partial: 'problems/problem', locals: {problem: problem} %>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<%= render partial: 'submissions/form' %>
+<section class="section">
+  <%= render partial: 'submissions/form' %>
+</section>
 
