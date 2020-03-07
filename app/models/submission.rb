@@ -1,4 +1,4 @@
-require 'open3'
+require "#{Rails.root}/lib/console_runner/console_runner.rb"
 
 class Submission < ApplicationRecord
   belongs_to :problem
@@ -6,44 +6,73 @@ class Submission < ApplicationRecord
   belongs_to :user
 
   def process
-    directory_path = "submissions/#{id}/"
-    file_path = "#{directory_path}Main#{language.extension}"
+    submission_directory = "#{Rails.root}/submissions/#{id}/"
+    source_name = "Main#{language.extension}"
+    source_path = "#{submission_directory}#{source_name}"
+    bwrap_path = "#{Rails.root}/lib/bwrapper/run_sandbox.sh"
 
-    cr = ConsoleRunner.new("mkdir -p #{directory_path} && mkdir -p #{directory_path}/compiled")
-    cr.run
+    cr = ConsoleRunner.new("mkdir -p #{submission_directory} && mkdir -p #{submission_directory}/compiled")
+    cr.finish
 
-    File.open(file_path, "w") do |file|
+    File.open(source_path, "w") do |file|
       file.write(code)
     end
 
+    sb_submission_directory = "/tmp/submission/"
+    sb_compiled_directory = "/tmp/compiled/"
+    sb_source_path = "#{sb_submission_directory}#{source_name}"
     case language.name
     when "Java"
-      compile_command = "javac #{file_path}"
-      run_command = "java -cp #{directory_path} Main"
+      compile_command = "javac -d #{sb_compiled_directory} #{sb_source_path}"
+      run_command = "java -cp #{sb_compiled_directory} Main"
     when "C"
-      compiled_path = "#{directory_path}Main.out"
-      compile_command = "gcc -o #{compiled_path} #{file_path}"
-      run_command = "./#{compiled_path}"
+      compile_command = "gcc -o #{sb_compiled_directory}Main.out #{sb_source_path}"
+      run_command = "./#{sb_compiled_directory}Main.out"
     when "Python"
-      run_command = "python #{file_path}"
+      run_command = "python #{sb_source_path}"
     end
 
     if not compile_command.nil?
-      cr = ConsoleRunner.new(compile_command)
-      _, _, status = cr.run
-      
-      if not status.success?
-        "compilation error"
+      begin
+        Timeout.timeout(2) do
+          cr = ConsoleRunner.new("#{bwrap_path} '#{compile_command}' '#{submission_directory}'")
+          _, _, status = cr.finish
+          
+          if not status.success?
+            return "compilation error"
+          end
+        end
+      rescue Timeout::Error
+        cr.kill
+        puts "COMPILE TIME LIMIT"
+        return "compilation time limit"
       end
     end
 
-    cr = ConsoleRunner.new(run_command)
-    output_text, _, status = cr.run
-    
-    if not status.success?
-      "execution error"
-    else
-      output_text
+    begin
+      Timeout.timeout(2) do
+        begin
+          cr = ConsoleRunner.new("#{bwrap_path} '#{run_command}' '#{submission_directory}'")
+          cr.write_input("8")
+
+          output_text, _, status = cr.finish
+          
+          cr = ConsoleRunner.new("rm -r #{submission_directory}")
+          cr.finish
+
+          if not status.success?
+            "execution error"
+          else
+            output_text
+          end
+        ensure
+          cr.kill
+        end
+      end
+    rescue Timeout::Error
+      cr.kill
+      puts "TIME LIMIT"
+      return "time limit"
     end
   end
 end

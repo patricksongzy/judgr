@@ -1,18 +1,18 @@
 <h1 class="title">Contests</h1>
-<table class="table">
+<table class="table is-fullwidth">
   <tr>
     <th>Contest Name</th>
   </tr>
   <% @contests.each do |contest| %>
     <tr>
-      <td>
+      <td width="100%">
         <%= link_to contest.name, contest_path(contest) %>
       </td>
       <td>
         <%= button_to "Edit", edit_admin_contest_path(contest), method: :get, class: "button"%>
       </td>
       <td>
-        <%= button_to "Delete", admin_contest_path(contest), method: :delete, class: "button"%>
+        <%= button_to "Delete", admin_contest_path(contest), method: :delete, class: "button is-danger"%>
       </td>
     </tr>
   <% end %>
