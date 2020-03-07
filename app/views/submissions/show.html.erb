@@ -1,4 +1,4 @@
-<h1><%= "#{@submission.id} #{@submission.language.name}" %></h1>
-<code>
-  <%= @submission.code %>
-</code>
+<h1 class="title"><%= "Submission #{@submission.id}: #{@submission.language.name}" %></h1>
+<pre>
+<%= @submission.code %>
+</pre>

@@ -1,3 +1,5 @@
-<li>
-  <%= link_to "#{submission.id} #{submission.language.name}", submission_path(submission) %>
-</li>
+<tr>
+  <td width="100%">
+    <%= link_to "Submission #{submission.id}: #{submission.language.name}", submission_path(submission) %>
+  </td>
+</tr>
