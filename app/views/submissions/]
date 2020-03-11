@@ -23,15 +23,15 @@
           <%= f.hidden_field :problem_id, :value => @problem.id %>
         <% end %>
         <div class="field">
-          <%= f.label :code_file, "Upload a submission (*.java *.py *.c)", class: "label has-text-weight-normal" %>
+          <%= f.label :code, "Upload a submission (*.java *.py *.c)", class: "label has-text-weight-normal" %>
           <div class="control">
-            <%= f.file_field :code_file %>
+            <%= f.file_field :code %>
           </div>
         </div>
         <div class="field">
           <article class="message is-warning">
             <div class="message-body">
-              Any attempts to run malicious code, or to circumvent security measures, are prohibited, and may result in immediate account suspension, including disqualification from future contests.
+              Any attempts to run malicious code or to circumvent security measures is prohibited, and may result in immediate disqualification.
             </div>
           </article>
           <div class="control">

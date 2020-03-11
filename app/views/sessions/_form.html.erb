@@ -1,5 +1,11 @@
-  <div class="field text-field">
-<%= form.label :email, class: "label" %>
+<article class="message is-warning">
+  <div class="message-body">
+    Any attempts to gain unauthorized access to this system are prohibited.
+  </div>
+</article>
+
+<div class="field text-field">
+  <%= form.label :email, class: "label" %>
   <div class="control">
     <%= form.text_field :email, type: "email", class: "input" %>
   </div>
