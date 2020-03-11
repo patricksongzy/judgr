@@ -5,6 +5,8 @@ class Submission < ApplicationRecord
   belongs_to :language
   belongs_to :user
 
+  attr_accessor :code_file
+
   def process
     submission_directory = "#{Rails.root}/submissions/#{id}/"
     source_name = "Main#{language.extension}"
