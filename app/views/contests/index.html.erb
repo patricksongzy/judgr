@@ -1,18 +1,22 @@
 <h1 class="title">Contests</h1>
-<table class="table is-hoverable is-fullwidth">
-  <thead>
-    <tr>
-      <th>Contest Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @contests.each do |contest| %>
+<% if @contests.length > 0 %>
+  <table class="table is-hoverable is-fullwidth">
+    <thead>
       <tr>
-        <td width="100%">
-          <%= link_to contest.name, contest_path(contest) %>
-        </td>
+        <th>Contest Name</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @contests.each do |contest| %>
+        <tr>
+          <td width="100%">
+            <%= link_to contest.name, contest_path(contest) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>Currently no contests available.</p>
+<% end %>
 

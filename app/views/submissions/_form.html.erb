@@ -5,11 +5,7 @@
       <p>No problems currently in contest.</p>
     <% else %>
       <%= form_for @submission do |f| %>
-        <ul>
-          <% @submission.errors.full_messages.each do |error| %>
-            <li><%= error %></li>
-          <% end %>
-        </ul>
+        <%= render partial: 'application/form_errors', locals: {model: @submission} %>
         <% if @problem.nil? %>
           <div class="field">
             <%= f.label :problem_id, class: "label" %>

@@ -11,7 +11,14 @@ class SubmissionsController < ApplicationController
     authorize @submission
 
     code_file = @submission.code_file
-    @submission.language_id = Language.where(:extension => File.extname(code_file.original_filename)).first.id
+    language = Language.where(:extension => File.extname(code_file.original_filename)).first
+
+    if language == nil
+      redirect_to request.referrer, flash: {error: "unknown extension"}
+      return
+    end
+
+    @submission.language_id = language.id
     @submission.code = code_file.read
 
     @submission.user_id = current_user.id

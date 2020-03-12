@@ -7,7 +7,7 @@ class BWrapper
     file_name = "lib/bwrapper/run_sandbox.sh"
     unless File.file?(file_name)
       wrapper = BWrapper.new(file_name, ["cairo", "gtk", "x11", "libgl", "site-packages"])
-      wrapper.wrap(["java", "javac", "gcc", "python", "as", "ld"], library_directories: ["gcc", "python*"])
+      wrapper.wrap(["java", "javac", "gcc", "python", "as", "ld", "timeout"], library_directories: ["gcc", "python*"])
     end
     
     cr = ConsoleRunner.new("chmod +x #{file_name}")
@@ -73,6 +73,7 @@ class BWrapper
     write_argument("ro-bind", "$clean_path", "/tmp/submission")
     write_argument("chdir", "/")
     write_argument("unshare-all")
+    write_argument("new-session")
     write_argument("die-with-parent")
     write_argument("dir", "/run/user/$(id -u)")
     write_argument("setenv", "XDG_RUNTIME_DIR", "'/run/user/`id -u`'")

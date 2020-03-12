@@ -12,6 +12,7 @@ class Submission < ApplicationRecord
     source_name = "Main#{language.extension}"
     source_path = "#{submission_directory}#{source_name}"
     bwrap_path = "#{Rails.root}/lib/bwrapper/run_sandbox.sh"
+    problem_data_path = "#{Rails.root}/datasets/#{problem.uuid}/"
 
     cr = ConsoleRunner.new("mkdir -p #{submission_directory} && mkdir -p #{submission_directory}/compiled")
     cr.finish
@@ -52,15 +53,21 @@ class Submission < ApplicationRecord
     end
 
     begin
-      Timeout.timeout(2) do
+      time_limit = problem.time_limit
+      # add timeout for safety
+      Timeout.timeout(time_limit + 5) do
         begin
-          cr = ConsoleRunner.new("#{bwrap_path} '#{run_command}' '#{submission_directory}'")
+          cr = ConsoleRunner.new("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'")
           cr.write_input("8")
 
           output_text, _, status = cr.finish
           
           cr = ConsoleRunner.new("rm -r #{submission_directory}")
           cr.finish
+
+          if status.exitstatus == 124
+            raise Timeout::Error
+          end
 
           if not status.success?
             "execution error"

@@ -33,13 +33,16 @@ class ConsoleRunner
   end
 
   def read_streams
-    rdin, rdout, rderr = IO.select([@stdin], [@stdout], [@stderr])
-    if rdin
-      results = []
-      results.push(rdout.member? @stdout ? @stdout.read : "")
-      results.push(rderr.member? @stderr ? @stderr.read : "")
+    output_text = ""
+    Thread.new do
+      output_text = @stdout.read
+    end.join
 
-      return results
-    end
+    error_text = ""
+    Thread.new do
+      error_text = @stderr.read
+    end.join
+
+    return output_text, error_text
   end
 end

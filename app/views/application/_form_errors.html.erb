@@ -1,0 +1,10 @@
+<% if model.errors.full_messages.length > 0 or flash[:error] %>
+  <div class="notification is-danger">
+    <ul>
+      <li><%= flash[:error] %></li>
+      <% model.errors.full_messages.each do |error| %>
+        <li><%= error %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
