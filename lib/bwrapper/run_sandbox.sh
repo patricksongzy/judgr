@@ -2,7 +2,7 @@ execution=$1
 path=$2
 clean_execution=${execution//[^a-zA-Z0-9 ./-]/}
 clean_path=${path//[^a-zA-Z0-9 ./-]/}
-if [ -z "$clean_path" ] || [ -z "$clean_execution"] ; then
+if [ -z "$clean_path" ] || [ -z "$clean_execution" ] ; then
   echo "Missing required arguments."
   exit 1
 fi

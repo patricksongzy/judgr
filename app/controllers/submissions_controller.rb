@@ -23,8 +23,8 @@ class SubmissionsController < ApplicationController
 
     @submission.user_id = current_user.id
 
-    @submission.save!
     @submission.process
+    @submission.save!
 
     redirect_to submission_path(@submission)
   end

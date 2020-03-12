@@ -8,6 +8,8 @@ class Submission < ApplicationRecord
   attr_accessor :code_file
 
   def process
+    self.score = 0
+
     submission_directory = "#{Rails.root}/submissions/#{id}/"
     source_name = "Main#{language.extension}"
     source_path = "#{submission_directory}#{source_name}"
@@ -41,14 +43,14 @@ class Submission < ApplicationRecord
           _, _, status = cr.finish
           
           if not status.success?
-            puts "COMPILE ERROR"
-            return "compilation error"
+            self.message = "Compilation error."
+            return
           end
         end
       rescue Timeout::Error
         cr.kill
-        puts "COMPILE TIME LIMIT"
-        return "compilation time limit"
+        self.message = "Compilation time limit exceeded."
+        return
       end
     end
 
@@ -58,7 +60,7 @@ class Submission < ApplicationRecord
     begin
       # add timeout for safety
       begin
-        for input_file in test_data.keys
+        for input_file in test_data.keys.sort
           Timeout.timeout(time_limit + 5) do
             cr = ConsoleRunner.new("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'")
 
@@ -71,22 +73,33 @@ class Submission < ApplicationRecord
             output_text, _, status = cr.finish
 
             if status.exitstatus == 124
-              raise Timeout::Error
+              self.message = 'Time limit exceeded.'
+              return
             end
 
             if not status.success?
-              "execution error"
+              self.message = "Runtime error."
+              return
             else
+              pass = true
+
               File.open(test_data[input_file], "r") do |f|
                 f.each_line.zip(output_text.each_line) do |target, output|
-                  puts "result #{target} vs #{output}"
+                  unless target == output
+                    pass = false
+                    break
+                  end
                 end
+              end
+
+              if pass
+                self.score += 1
               end
             end
           rescue Timeout::Error
             cr.kill
-            puts "TIME LIMIT"
-            return "time limit"
+            self.message = "Time limit exceeded."
+            return
           end
         end
       ensure
@@ -96,6 +109,12 @@ class Submission < ApplicationRecord
         cr.finish
       end
     end
+
+    self.message = "Successfully scored submission."
+  end
+
+  def get_score
+    return "#{score} / #{problem.get_data.length}"
   end
 end
 

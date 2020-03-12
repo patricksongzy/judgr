@@ -29,7 +29,7 @@ class BWrapper
     @f.write("clean_execution=${execution//[^a-zA-Z0-9\s.\/-]/}\n")
     @f.write("clean_path=${path//[^a-zA-Z0-9\s.\/-]/}\n")
 
-    @f.write("if [ -z \"$clean_path\" ] || [ -z \"$clean_execution\"] ; then\n")
+    @f.write("if [ -z \"$clean_path\" ] || [ -z \"$clean_execution\" ] ; then\n")
     @f.write("  echo \"Missing required arguments.\"\n")
     @f.write("  exit 1\n")
     @f.write("fi\n")

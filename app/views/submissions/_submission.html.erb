@@ -1,5 +1,11 @@
 <tr>
-  <td width="100%">
+  <td>
     <%= link_to "Submission #{submission.id}: #{submission.language.name}", submission_path(submission) %>
+  </td>
+  <td>
+    <%= submission.message %>
+  </td>
+  <td>
+    <%= submission.get_score %>
   </td>
 </tr>
