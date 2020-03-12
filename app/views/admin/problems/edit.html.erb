@@ -1,2 +1,27 @@
 <h1 class="title"><%= @problem.name %></h1>
-<%= render partial: 'admin/problems/form' %>
+<div class="container">
+  <table class="table is-hoverable is-fullwidth">
+    <thead>
+      <th>Test Case</th>
+      <th>Output File</th>
+    </thead>
+    <tbody>
+      <% for problem_input in @problem.get_data.keys %>
+        <tr>
+          <td>
+            <%= File.basename(problem_input) %>
+          </td>
+          <td>
+            <%= File.basename(@problem.get_data[problem_input]) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<section class="section">
+  <div class="box">
+    <%= render partial: 'admin/problems/form' %>
+  </div>
+</section>

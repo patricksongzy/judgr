@@ -12,7 +12,6 @@ class Submission < ApplicationRecord
     source_name = "Main#{language.extension}"
     source_path = "#{submission_directory}#{source_name}"
     bwrap_path = "#{Rails.root}/lib/bwrapper/run_sandbox.sh"
-    problem_data_path = "#{Rails.root}/datasets/#{problem.uuid}/"
 
     cr = ConsoleRunner.new("mkdir -p #{submission_directory} && mkdir -p #{submission_directory}/compiled")
     cr.finish
@@ -42,6 +41,7 @@ class Submission < ApplicationRecord
           _, _, status = cr.finish
           
           if not status.success?
+            puts "COMPILE ERROR"
             return "compilation error"
           end
         end
@@ -52,36 +52,49 @@ class Submission < ApplicationRecord
       end
     end
 
+    time_limit = problem.time_limit
+    test_data = problem.get_data
+
     begin
-      time_limit = problem.time_limit
       # add timeout for safety
-      Timeout.timeout(time_limit + 5) do
-        begin
-          cr = ConsoleRunner.new("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'")
-          cr.write_input("8")
+      begin
+        for input_file in test_data.keys
+          Timeout.timeout(time_limit + 5) do
+            cr = ConsoleRunner.new("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'")
 
-          output_text, _, status = cr.finish
-          
-          cr = ConsoleRunner.new("rm -r #{submission_directory}")
-          cr.finish
+            File.open(input_file, "r") do |f|
+              f.each_line do |line|
+                cr.write_input(line)
+              end
+            end
 
-          if status.exitstatus == 124
-            raise Timeout::Error
+            output_text, _, status = cr.finish
+
+            if status.exitstatus == 124
+              raise Timeout::Error
+            end
+
+            if not status.success?
+              "execution error"
+            else
+              File.open(test_data[input_file], "r") do |f|
+                f.each_line.zip(output_text.each_line) do |target, output|
+                  puts "result #{target} vs #{output}"
+                end
+              end
+            end
+          rescue Timeout::Error
+            cr.kill
+            puts "TIME LIMIT"
+            return "time limit"
           end
-
-          if not status.success?
-            "execution error"
-          else
-            output_text
-          end
-        ensure
-          cr.kill
         end
+      ensure
+        cr.kill
+        
+        cr = ConsoleRunner.new("rm -r #{submission_directory}")
+        cr.finish
       end
-    rescue Timeout::Error
-      cr.kill
-      puts "TIME LIMIT"
-      return "time limit"
     end
   end
 end

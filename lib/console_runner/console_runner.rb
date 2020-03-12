@@ -10,12 +10,13 @@ class ConsoleRunner
   end
 
   def finish
-    output_text, error_text = read_streams
-    status = @wait_thr.value
-
     @stdin.close
+
+    output_text, error_text = read_streams
     @stdout.close
     @stderr.close
+
+    status = @wait_thr.value
 
     return output_text, error_text, status
   end
