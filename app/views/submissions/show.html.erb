@@ -1,4 +1,9 @@
 <h1 class="title"><%= "Submission #{@submission.id}: #{@submission.language.name}" %></h1>
+<div class="notification <%= @submission.success? ? 'is-success' : 'is-danger' %>">
+  <%= @submission.message %>
+  <br />
+  <b>Score: <%= @submission.get_score %></b>
+</div>
 <pre>
 <%= @submission.code %>
 </pre>

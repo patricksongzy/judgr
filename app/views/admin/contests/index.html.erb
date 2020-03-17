@@ -3,7 +3,7 @@
   <table class="table is-fullwidth is-hoverable">
     <thead>
       <tr>
-        <th>Contest Name</th>
+        <%= render partial: 'contests/table_headings' %>
         <th>Edit</th>
         <th>Delete</th>
       </tr>
@@ -11,9 +11,7 @@
     <tbody>
       <% @contests.each do |contest| %>
         <tr>
-          <td width="100%">
-            <%= link_to contest.name, contest_path(contest) %>
-          </td>
+          <%= render partial: 'contests/contest', locals: {contest: contest} %>
           <td>
             <%= button_to "Edit", edit_admin_contest_path(contest), method: :get, class: "button"%>
           </td>

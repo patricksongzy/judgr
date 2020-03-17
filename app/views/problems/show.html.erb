@@ -1,4 +1,7 @@
 <h1 class="title"><%= @problem.name %></h1>
+<div class="notification is-info">
+  <b>Score: <%= @problem.get_problem_score(current_user).last %></b>
+</div>
 <p>
   <%= simple_format @problem.description %>
 </p>

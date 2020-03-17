@@ -45,6 +45,26 @@ class Problem < ApplicationRecord
     @test_data
   end
 
+  def get_problem_score(user)
+    max_score = get_max_score
+
+    if user.nil?
+      return 0, max_score, "not signed in."
+    end
+
+    submissions = Submission.where(:user => user, :problem => self)
+    if submissions.empty?
+      return 0, max_score, "no submissions have been made yet."
+    else
+      score = submissions.maximum(:score)
+      return score, max_score, "#{score} / #{get_max_score}"
+    end
+  end
+
+  def get_max_score
+    get_data.length
+  end
+
   private
 
   def set_uuid

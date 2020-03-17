@@ -9,6 +9,7 @@ class Submission < ApplicationRecord
 
   def process
     self.score = 0
+    self.success = false
 
     submission_directory = "#{Rails.root}/submissions/#{id}/"
     source_name = "Main#{language.extension}"
@@ -111,10 +112,11 @@ class Submission < ApplicationRecord
     end
 
     self.message = "Successfully scored submission."
+    self.success = true
   end
 
   def get_score
-    return "#{score} / #{problem.get_data.length}"
+    return "#{score} / #{problem.get_max_score}"
   end
 end
 

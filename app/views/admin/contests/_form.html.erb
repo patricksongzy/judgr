@@ -11,6 +11,20 @@
     </div>
   </div>
   <div class="field">
+    <%= f.label :start_datetime, class: "label" %>
+    <div class="control">
+      <%= f.date_field :start_date, min: Date.today %>
+      <%= f.time_field :start_time %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :end_datetime, class: "label" %>
+    <div class="control">
+      <%= f.date_field :end_date, min: Date.today %>
+      <%= f.time_field :end_time %>
+    </div>
+  </div>
+  <div class="field">
     <div class="control">
       <%= f.submit class: "button is-primary" %>
     </div>

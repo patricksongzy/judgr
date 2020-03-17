@@ -3,15 +3,13 @@
   <table class="table is-hoverable is-fullwidth">
     <thead>
       <tr>
-        <th>Contest Name</th>
+        <%= render partial: 'contests/table_headings' %>
       </tr>
     </thead>
     <tbody>
-      <% @contests.each do |contest| %>
+      <% for contest in @contests %>
         <tr>
-          <td width="100%">
-            <%= link_to contest.name, contest_path(contest) %>
-          </td>
+          <%= render partial: 'contests/contest', locals: {contest: contest} %>
         </tr>
       <% end %>
     </tbody>

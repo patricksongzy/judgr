@@ -1,3 +1,5 @@
+require 'date'
+
 class Admin::ContestsController < ApplicationController
   include ContestsHelper
 
@@ -19,6 +21,8 @@ class Admin::ContestsController < ApplicationController
   def create
     @contest = Contest.new(contest_params)
     authorize [:admin, @contest]
+    
+    puts DateTime.parse("#{@contest.start_date} #{@contest.start_time}")
 
     @contest.save!
 
