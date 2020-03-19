@@ -1,0 +1,11 @@
+<nav class="breadcrumb" aria-label="breadcrumbs">
+  <ul>
+    <% ancestors = model.get_ancestors(false) %>
+    <% ancestors.drop(1).reverse.each do |name, ancestor_path| %>
+      <li><%= link_to name, ancestor_path %></li>
+    <% end %>
+    <% current_name, current_path = ancestors.first %>
+    <li class="is-active"><a href="#" aria-current="page"><%= current_name %></a></li>
+  </ul>
+</nav>
+

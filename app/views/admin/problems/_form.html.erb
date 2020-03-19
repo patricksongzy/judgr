@@ -1,5 +1,5 @@
 <%= form_for [:admin, @contest, @problem] do |f| %>
-  <%= render partial: 'application/form_errors', locals: {model: @problem} %>
+  <%= render partial: 'application/form_errors', locals: {error: :problem_error} %>
   <div class="field">
     <%= f.label :name, class: "label" %>
     <div class="control">

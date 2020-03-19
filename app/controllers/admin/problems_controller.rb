@@ -26,11 +26,17 @@ class Admin::ProblemsController < ApplicationController
     authorize [:admin, @problem]
 
     @problem.contest_id = params[:contest_id]
-    @problem.save!
 
-    @problem.create_dataset(params[:problem][:problem_data])
+    if @problem.valid?
+      @problem.save!
+      @problem.create_dataset(params[:problem][:problem_data])
 
-    redirect_to problem_path(@problem)
+      redirect_to problem_path(@problem)
+    else
+      flash[:problem_error] = @problem.errors.full_messages
+      flash.keep
+      redirect_to request.referrer
+    end
   end
 
   def destroy

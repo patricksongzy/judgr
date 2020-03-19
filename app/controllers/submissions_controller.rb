@@ -10,22 +10,17 @@ class SubmissionsController < ApplicationController
     @submission = Submission.new(submission_params)
     authorize @submission
 
-    code_file = @submission.code_file
-    language = Language.where(:extension => File.extname(code_file.original_filename)).first
+    @submission.create(current_user)
 
-    if language == nil
-      redirect_to request.referrer, flash: {error: "unknown extension"}
-      return
+    if @submission.valid?
+      @submission.process
+      @submission.save!
+
+      redirect_to submission_path(@submission)
+    else
+      flash[:submission_error] = @submission.errors.full_messages
+      flash.keep
+      redirect_to request.referrer
     end
-
-    @submission.language_id = language.id
-    @submission.code = code_file.read
-
-    @submission.user_id = current_user.id
-
-    @submission.process
-    @submission.save!
-
-    redirect_to submission_path(@submission)
   end
 end

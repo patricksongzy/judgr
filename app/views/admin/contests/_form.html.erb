@@ -1,9 +1,5 @@
 <%= form_for [:admin, @contest] do |f| %>
-  <ul>
-    <% @contest.errors.full_messages.each do |error| %>
-      <li><%= error %></li>
-    <% end %>
-  </ul>
+  <%= render partial: 'application/form_errors', locals: {error: :contest_error} %>
   <div class="field">
     <%= f.label :name, class: "label" %>
     <div class="control">

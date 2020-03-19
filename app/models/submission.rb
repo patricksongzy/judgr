@@ -1,11 +1,42 @@
 require "#{Rails.root}/lib/console_runner/console_runner.rb"
 
 class Submission < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   belongs_to :problem
   belongs_to :language
   belongs_to :user
 
   attr_accessor :code_file
+  validates :code_file, presence: true
+
+  def get_name
+    "Submission #{id}: #{language.name}"
+  end
+
+  def get_ancestors(is_editing)
+    ancestors = []
+    ancestors << [get_name, submission_path(self)]
+    ancestors += problem.get_ancestors(is_editing)
+  end
+
+  def create(current_user)
+    if code_file.nil?
+      self.errors.add(:code_file)
+      return
+    end
+
+    language = Language.where(:extension => File.extname(code_file.original_filename)).first
+
+    if language == nil
+      self.errors.add(:language)
+      return
+    end
+
+    self.language_id = language.id
+    self.code = code_file.read
+    self.user_id = current_user.id
+  end
 
   def process
     self.score = 0

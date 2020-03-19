@@ -22,7 +22,9 @@ class Admin::ContestsController < ApplicationController
     @contest = Contest.new(contest_params)
     authorize [:admin, @contest]
     
-    puts DateTime.parse("#{@contest.start_date} #{@contest.start_time}")
+    if @contest.start_date and @contest.start_time
+      puts DateTime.parse("#{@contest.start_date} #{@contest.start_time}")
+    end
 
     @contest.save!
 

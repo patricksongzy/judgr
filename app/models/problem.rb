@@ -1,13 +1,29 @@
 require "#{Rails.root}/lib/console_runner/console_runner.rb"
 
 class Problem < ApplicationRecord
+  include Rails.application.routes.url_helpers
+
   has_many :submissions
   belongs_to :contest
 
   attr_accessor :problem_data
+  validates :problem_data, presence: true
 
   before_create :set_uuid
   before_destroy :delete_dataset
+
+  def get_ancestors(is_editing)
+    puts self.class.parent
+    ancestors = []
+    
+    if is_editing
+      path = edit_admin_contest_problem_path(self)
+    else
+      path = problem_path(self)
+    end
+    ancestors << [name, path]
+    ancestors += contest.get_ancestors(is_editing)
+  end
 
   def create_dataset(test_data)
     cr = ConsoleRunner.new("rm -r #{Rails.root}/datasets/#{uuid}")
