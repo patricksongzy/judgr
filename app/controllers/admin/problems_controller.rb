@@ -16,7 +16,9 @@ class Admin::ProblemsController < ApplicationController
 
     @problem.update(problem_params)
 
-    @problem.create_dataset(params[:problem][:problem_data])
+    if @problem.problem_data
+      @problem.create_dataset
+    end
 
     redirect_to problem_path(@problem)
   end
@@ -29,7 +31,7 @@ class Admin::ProblemsController < ApplicationController
 
     if @problem.valid?
       @problem.save!
-      @problem.create_dataset(params[:problem][:problem_data])
+      @problem.create_dataset
 
       redirect_to problem_path(@problem)
     else

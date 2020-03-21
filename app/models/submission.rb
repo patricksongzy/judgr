@@ -94,7 +94,7 @@ class Submission < ApplicationRecord
       begin
         for input_file in test_data.keys.sort
           Timeout.timeout(time_limit + 5) do
-            cr = ConsoleRunner.new("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'")
+            cr = ConsoleRunner.new("(ulimit -Hv 512000; #{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}')")
 
             File.open(input_file, "r") do |f|
               f.each_line do |line|
@@ -103,9 +103,10 @@ class Submission < ApplicationRecord
             end
 
             output_text, _, status = cr.finish
+            puts output_text
 
             if status.exitstatus == 124
-              self.message = 'Time limit exceeded.'
+              self.message = "Time limit exceeded."
               return
             end
 

@@ -9,7 +9,7 @@
   <div class="field">
     <%= f.label :description, class: "label" %>
     <div class="control">
-      <%= f.text_area :description, class: "textarea"%>
+      <%= f.text_area :description, class: "textarea is-family-monospace", value: @problem.get_description %>
     </div>
   </div>
   <hr />

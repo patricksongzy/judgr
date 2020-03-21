@@ -22,10 +22,6 @@ class Admin::ContestsController < ApplicationController
     @contest = Contest.new(contest_params)
     authorize [:admin, @contest]
     
-    if @contest.start_date and @contest.start_time
-      puts DateTime.parse("#{@contest.start_date} #{@contest.start_time}")
-    end
-
     @contest.save!
 
     redirect_to contest_path(@contest)
@@ -34,6 +30,9 @@ class Admin::ContestsController < ApplicationController
   def edit
     @contest = Contest.find(params[:id])
     authorize [:admin, @contest]
+
+    @contest.start_date, @contest.start_time = @contest.get_start
+    @contest.end_date, @contest.end_time = @contest.get_end
 
     @problem = Problem.new
     authorize [:admin, @problem]
@@ -44,6 +43,7 @@ class Admin::ContestsController < ApplicationController
     authorize [:admin, @contest]
 
     @contest.update(contest_params)
+    puts contest_params
 
     redirect_to contest_path(@contest)
   end

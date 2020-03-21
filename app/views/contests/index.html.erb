@@ -1,19 +1,21 @@
 <h1 class="title">Contests</h1>
 <% if @contests.length > 0 %>
-  <table class="table is-hoverable is-fullwidth">
-    <thead>
-      <tr>
-        <%= render partial: 'contests/table_headings' %>
-      </tr>
-    </thead>
-    <tbody>
-      <% for contest in @contests %>
+  <div class="table-container">
+    <table class="table is-hoverable is-fullwidth">
+      <thead>
         <tr>
-          <%= render partial: 'contests/contest', locals: {contest: contest} %>
+          <%= render partial: 'contests/table_headings' %>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% for contest in @contests %>
+          <tr>
+            <%= render partial: 'contests/contest', locals: {contest: contest} %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% else %>
   <p>Currently no contests available.</p>
 <% end %>

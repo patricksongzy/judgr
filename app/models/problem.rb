@@ -12,8 +12,12 @@ class Problem < ApplicationRecord
   before_create :set_uuid
   before_destroy :delete_dataset
 
+  def get_description
+    return description if description
+    "<h2 class=\"title is-5\">Problem Description</h2>\n<p>\nPut the problem description here.\n</p>\n<br />\n<h2 class=\"title is-5\">Input Specification</h2>\n<p>\nPut the input specification here.\n</p>\n<br />\n<h2 class=\"title is-5\">Output Specification</h2>\n<p>\nPut the output specification here.\n</p>\n<br />"
+  end
+
   def get_ancestors(is_editing)
-    puts self.class.parent
     ancestors = []
     
     if is_editing
@@ -25,14 +29,14 @@ class Problem < ApplicationRecord
     ancestors += contest.get_ancestors(is_editing)
   end
 
-  def create_dataset(test_data)
+  def create_dataset
     cr = ConsoleRunner.new("rm -r #{Rails.root}/datasets/#{uuid}")
     cr.finish
     cr = ConsoleRunner.new("mkdir -p #{Rails.root}/datasets/#{uuid}")
     cr.finish
 
     @test_data = Hash.new
-    for test_datum in test_data
+    for test_datum in problem_data
       file_extension = File.extname(test_datum)
       unless [".in", ".out"].include? file_extension
         next
