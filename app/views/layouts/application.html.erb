@@ -9,6 +9,9 @@
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
     <script type="text/javascript" async
       src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+      document.addEventListener('turbolinks:load', () => {
+        MathJax.Hub.Typeset();
+      });
     </script>
   </head>
 
@@ -42,12 +45,9 @@
     </nav>
     <section class="section">
       <div class="container">
+        <%= render partial: 'application/errors', locals: {error: :application_error, prompt: "Error:"} %>
         <%= yield %>
       </div>
     </section>
   </body>
-
-  <script>
-    MathJax.Hub.Typeset();
-  </script>
 </html>

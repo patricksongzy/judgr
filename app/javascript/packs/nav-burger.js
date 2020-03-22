@@ -1,9 +1,5 @@
-console.log("execute");
-
 // Bulma nav burger documentation
 document.addEventListener('turbolinks:load', () => {
-  console.log("loaded");
-
   // Get all "navbar-burger" elements
   const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
 

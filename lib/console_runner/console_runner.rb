@@ -22,6 +22,9 @@ class ConsoleRunner
   end
 
   def kill
+    @output_thread.kill if @output_thread
+    @error_thread.kill if @error_thread
+
     @stdin.close
     @stdout.close
     @stderr.close
@@ -35,12 +38,12 @@ class ConsoleRunner
 
   def read_streams
     output_text = ""
-    Thread.new do
+    @output_thread = Thread.new do
       output_text = @stdout.read
     end.join
 
     error_text = ""
-    Thread.new do
+    @error_thread = Thread.new do
       error_text = @stderr.read
     end.join
 

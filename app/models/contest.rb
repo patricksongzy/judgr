@@ -11,9 +11,13 @@ class Contest < ApplicationRecord
 
   before_save :set_dates
 
+  ##
+  # Gets ancestors for the breadcrumb.
+  #
   def get_ancestors(is_editing)
     ancestors = []
 
+    # determine which paths to return
     if is_editing
       path = edit_admin_contest_path(self)
       index_path = admin_contests_path
@@ -23,15 +27,19 @@ class Contest < ApplicationRecord
     end
 
     ancestors << [name, path]
+    # contest is the last level of paths to return
     ancestors << ["Contests", index_path]
   end
 
-  def get_user_score(user)
+  ##
+  # Gets the user's cumulative score for the contest.
+  #
+  def get_score(user)
     total_score = 0
     max_score = 0
 
     for problem in problems
-      score, problem_max_score, _ = problem.get_problem_score(user)
+      score, problem_max_score, _ = problem.get_score(user)
       total_score += score
       max_score += problem_max_score
     end
@@ -39,10 +47,16 @@ class Contest < ApplicationRecord
     return total_score, max_score, "#{total_score} / #{max_score}"
   end
 
+  ##
+  # Gets the epoch from an ISO date and time.
+  #
   def get_epoch(iso_date, time)
     DateTime.parse("#{iso_date} #{time}".strip).change(offset: (Time.now.utc_offset / 3600).to_s)
   end
 
+  ##
+  # Gets the ISO formatted date from epoch.
+  #
   def get_iso(epoch)
     if epoch
       time = Time.at(epoch)
@@ -50,10 +64,14 @@ class Contest < ApplicationRecord
     end
   end
 
+  ##
+  # Display contest open and close information in a human readable way.
+  #
   def get_human_dates
     now = Time.now.to_i
     time_to_start = distance_of_time_in_words_to_now(start_datetime)
 
+    # some contests do not have a close date
     if end_datetime
       time_to_end = distance_of_time_in_words_to_now(end_datetime)
       end_message = now >= end_datetime ? " and closed #{time_to_end} ago" : " and closes in #{time_to_end}"
@@ -66,20 +84,70 @@ class Contest < ApplicationRecord
     end
   end
 
+  ##
+  # Gets the ISO start date and time.
+  #
   def get_start
     unless start_datetime.nil?
       get_iso(start_datetime)
     end
   end
 
+  ##
+  # Gets the ISO end date and time.
+  #
   def get_end
     unless end_datetime.nil?
       get_iso(end_datetime)
     end
   end
 
+  ##
+  # Gets the status of the contest.
+  #
+  def get_status
+    has_ended? ? 'Closed' : has_started? ? 'Open' : 'Scheduled'
+  end
+
+  ##
+  # Checks whether the contest is accepting submissions.
+  #
+  def is_open?
+    has_started? and not has_ended?
+  end
+
+  ##
+  # Check whether the contest will begin accepting submissions in the future.
+  #
+  def is_scheduled?
+    not (has_started and has_ended)
+  end
+
+  ##
+  # Check whether the current date and time is past the contest's start date and time.
+  #
+  def has_started?
+    return true if start_datetime.nil?
+
+    now = Time.now.to_i
+    now >= start_datetime
+  end
+
+  ##
+  # Checks whether the contest has ended.
+  #
+  def has_ended?
+    return false if end_datetime.nil?
+
+    now = Time.now.to_i
+    now >= end_datetime
+  end
+
   private
 
+  ##
+  # Initializes the start and end epochs from dates and times selected from fields.
+  #
   def set_dates
     if start_date.empty?
       self.start_datetime = Time.now.to_i

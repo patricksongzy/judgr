@@ -1,6 +1,8 @@
 class ContestsController < ApplicationController
+  include ContestsHelper
+
   def index
-    @contests = policy_scope(Contest).all
+    @contests = get_contests_ordered(policy_scope(Contest).all)
   end
 
   def show

@@ -3,7 +3,7 @@
     <%= link_to "Submission #{submission.id}: #{submission.language.name}", submission_path(submission) %>
   </td>
   <td>
-    <%= submission.message %>
+    <%= submission.get_message %>
   </td>
   <td>
     <%= submission.get_score %>

@@ -1,3 +1,10 @@
 # Judgr
-A work-in-progress Ruby on Rails online judge.
-Currently, a general MVC outline has been implemented.
+A Ruby on Rails online judge.
+
+## Dependencies
+* bubblewrap
+* cpulimit
+* gcc
+* Java
+* Python
+* Ruby (on Rails)

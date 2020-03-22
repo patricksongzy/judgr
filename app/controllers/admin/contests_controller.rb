@@ -6,11 +6,13 @@ class Admin::ContestsController < ApplicationController
   before_action :require_login
 
   def index
-    @contests = Contest.all
-    authorize [:admin, @contests]
+    all_unordered = Contest.all
+    authorize [:admin, all_unordered]
+
+    @contests = get_contests_ordered(all_unordered)
 
     @contest = Contest.new
-    authorize [:admin, @contests]
+    authorize [:admin, @contest]
   end
   
   def new

@@ -1,10 +1,1 @@
-<% if flash[error] %>
-  <div class="content notification is-danger">
-    <b>There were problems with this form:</b>
-    <ul>
-      <% for error in flash[error] %>
-        <li><%= error %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= render partial: 'application/errors', locals: {error: error, prompt: "There were problems with this form:"} %>

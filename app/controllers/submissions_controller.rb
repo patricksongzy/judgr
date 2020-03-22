@@ -13,8 +13,8 @@ class SubmissionsController < ApplicationController
     @submission.create(current_user)
 
     if @submission.valid?
-      @submission.process
       @submission.save!
+      ProcessSubmissionJob.perform_later @submission
 
       redirect_to submission_path(@submission)
     else

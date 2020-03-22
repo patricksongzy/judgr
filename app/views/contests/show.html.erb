@@ -1,11 +1,8 @@
 <%= render partial: 'application/breadcrumb', locals: {model: @contest} %>
+<%= render partial: 'application/time_banner' %>
 <h1 class="title"><%= @contest.name %></h1>
 <h1 class="title is-4">Problems</h1>
-<% unless current_user.nil? %>
-  <div class="notification is-info">
-    <b>Score: <%= @contest.get_user_score(current_user).last %></b>
-  </div>
-<% end %>
+<%= render partial: 'application/score_banner', locals: {model: @contest} %>
 <% if @contest.problems.length > 0 %>
 <table class="table is-hoverable is-fullwidth">
   <thead>

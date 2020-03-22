@@ -12,23 +12,34 @@ class Problem < ApplicationRecord
   before_create :set_uuid
   before_destroy :delete_dataset
 
+  ##
+  # Gets the problem description or a template to edit.
+  #
   def get_description
     return description if description
-    "<h2 class=\"title is-5\">Problem Description</h2>\n<p>\nPut the problem description here.\n</p>\n<br />\n<h2 class=\"title is-5\">Input Specification</h2>\n<p>\nPut the input specification here.\n</p>\n<br />\n<h2 class=\"title is-5\">Output Specification</h2>\n<p>\nPut the output specification here.\n</p>\n<br />"
+    I18n.t('problem_description')
   end
 
+  ##
+  # Gets ancestors for the breadcrumb.
+  #
   def get_ancestors(is_editing)
     ancestors = []
     
+    # determine which path to return
     if is_editing
       path = edit_admin_contest_problem_path(self)
     else
       path = problem_path(self)
     end
+
     ancestors << [name, path]
     ancestors += contest.get_ancestors(is_editing)
   end
 
+  ##
+  # Creates a dataset folder for the problem.
+  #
   def create_dataset
     cr = ConsoleRunner.new("rm -r #{Rails.root}/datasets/#{uuid}")
     cr.finish
@@ -38,6 +49,7 @@ class Problem < ApplicationRecord
     @test_data = Hash.new
     for test_datum in problem_data
       file_extension = File.extname(test_datum)
+      # filter out unwanted files
       unless [".in", ".out"].include? file_extension
         next
       end
@@ -48,12 +60,16 @@ class Problem < ApplicationRecord
         f.write(test_datum.read)
       end
 
+      # link the output file with its respective input file
       if file_extension == ".out"
         @test_data[file_path.chomp(".in") << ".out"] = file_path
       end
     end
   end
 
+  ##
+  # Gets the problem data.
+  #
   def get_data()
     if @test_data.nil?
       @test_data = Hash.new
@@ -65,7 +81,10 @@ class Problem < ApplicationRecord
     @test_data
   end
 
-  def get_problem_score(user)
+  ##
+  # Gets the top score of the user for the problem.
+  #
+  def get_score(user)
     max_score = get_max_score
 
     if user.nil?
@@ -81,16 +100,25 @@ class Problem < ApplicationRecord
     end
   end
 
+  ##
+  # Gets the maximum points which can be awarded for the problem.
+  #
   def get_max_score
     get_data.length
   end
 
   private
 
+  ##
+  # Initializes the problem UUID to avoid collisions between deleted problems and new ones.
+  #
   def set_uuid
     self.uuid = SecureRandom.uuid
   end
 
+  ##
+  # Deletes the dataset folder for the problem.
+  #
   def delete_dataset
     cr = ConsoleRunner.new("rm -r #{Rails.root}/datasets/#{uuid}")
     cr.finish

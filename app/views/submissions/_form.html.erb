@@ -1,4 +1,4 @@
-<% if policy(@submission).create? %>
+<% if policy(@contest).submit? %>
   <div class="box">
     <h2 class="title is-4">Create Submission</h2>
     <% if @contest.problems.empty? %>
@@ -27,7 +27,7 @@
         <div class="field">
           <article class="message is-warning">
             <div class="message-body">
-              Any attempts to run malicious code, or to circumvent security measures, are prohibited, and may result in immediate account suspension, including disqualification from future contests.
+              Any attempts to run malicious code, to circumvent security measures, or to abuse this system, are prohibited, and may result in immediate account suspension, including disqualification from future contests.
             </div>
           </article>
           <div class="control">
