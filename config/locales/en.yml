@@ -30,4 +30,25 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  contests:
+    name: Contest Name
+  problems:
+    name: Problem Name
+  submissions:
+    form:
+      create: Create Submission
+      no_problems: No problems currently in contest.
+      upload_prompt: Upload a submission
+      warning_message: Any attempts to run malicious code, or to circumvent security measures, are prohibited, and may result in immediate account suspension, including disqualification from future contests.
+  activerecord:
+    models:
+      contest:
+        one: Contest
+        other: Contests
+      problem:
+        one: Problem
+        other: Problems
+      submission:
+        one: Submission
+        other: Submissions
+
