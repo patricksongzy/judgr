@@ -1,4 +1,6 @@
-<div class="notification is-info">
-  <b><%= t 'judge.score' %>: <%= model.get_score(current_user).last %></b>
-</div>
+<% if signed_in? %>
+  <div class="notification is-info">
+    <b><%= t 'judge.score' %>: <%= model.get_score(current_user).last %></b>
+  </div>
+<% end %>
 

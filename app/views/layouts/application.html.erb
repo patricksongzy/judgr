@@ -7,7 +7,11 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'timer' %>
+
+    <script type="text/javascript">
+      window.I18n = <%= get_translations('timer').to_json.html_safe %>
+    </script>
+
     <script type="text/javascript" async
       src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
       document.addEventListener('turbolinks:load', () => {
@@ -46,7 +50,7 @@
     </nav>
     <section class="section">
       <div class="container">
-        <%= render partial: 'application/errors', locals: {error: :application_error, prompt: "Error:"} %>
+        <%= render partial: 'application/errors', locals: {error: :application_error, locale_prompt: 'errors.error_message'} %>
         <%= yield %>
       </div>
     </section>

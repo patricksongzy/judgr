@@ -54,6 +54,7 @@ en:
     hours: hours
     minutes: minutes
     seconds: seconds
+    contest_always_open: contest is always open.
     contest_closed: contest has closed.
 
   problems:
@@ -73,6 +74,9 @@ en:
     message: Message
     score: Score
     time_remaining: Time Remaining
+
+  errors:
+    error_message: There was a problem.
 
   forms:
     error_message:

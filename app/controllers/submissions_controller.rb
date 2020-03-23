@@ -4,6 +4,8 @@ class SubmissionsController < ApplicationController
   def show
     @submission = Submission.find(params[:id])
     authorize @submission
+
+    @contest = @submission.problem.contest
   end
 
   def create
