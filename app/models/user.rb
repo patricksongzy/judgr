@@ -3,6 +3,9 @@ class User < ApplicationRecord
 
   has_many :problems, dependent: :destroy
 
+  validates :password_confirmation, presence: true
+  validates :password, confirmation: { case_sensitive: true }
+
   enum role: [:default, :admin]
   
   after_initialize do

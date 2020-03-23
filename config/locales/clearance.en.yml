@@ -1,5 +1,18 @@
 ---
 en:
+  activerecord:
+    errors:
+      messages:
+        confirmation: doesn't match.
+      models:
+        user:
+          attributes:
+            email:
+              taken: has already been taken.
+            password:
+              blank: is required.
+            password_confirmation:
+              blank: is required.
   clearance:
     models:
       clearance_mailer:

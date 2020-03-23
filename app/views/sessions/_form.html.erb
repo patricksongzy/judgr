@@ -6,6 +6,15 @@
   </div>
 </article>
 
+<% if is_sign_up %>
+  <div class="field text-field">
+    <%= form.label :full_name, class: "label" %>
+    <div class="control">
+      <%= form.text_field :full_name, type: "text", class: "input" %>
+    </div>
+  </div>
+<% end %>
+
 <div class="field text-field">
   <%= form.label :email, class: "label" %>
   <div class="control">
@@ -19,6 +28,15 @@
     <%= form.password_field :password, type: "password", class: "input" %>
   </div>
 </div>
+
+<% if is_sign_up %>
+  <div class="field password-field">
+    <%= form.label :password_confirmation, class: "label" %>
+    <div class="control">
+      <%= form.password_field :password_confirmation, type: "password", class: "input" %>
+    </div>
+  </div>
+<% end %>
 
 <div class="field submit-field">
   <div class="control">

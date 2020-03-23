@@ -1,5 +1,4 @@
 <%= render partial: 'application/breadcrumb', locals: {model: @submission} %>
-<%= render partial: 'application/time_banner' %>
 <h1 class="title"><%= @submission.get_name %></h1>
 <div class="notification <%= @submission.success? ? 'is-success' : @submission.success.nil? ? 'is-warning' : 'is-danger' %>">
   <p><%= @submission.get_message %></p>

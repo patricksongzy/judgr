@@ -50,7 +50,9 @@
     </nav>
     <section class="section">
       <div class="container">
+        <%= yield(:header) %>
         <%= render partial: 'application/errors', locals: {error: :application_error, locale_prompt: 'errors.error_message'} %>
+        <%= render partial: 'application/status_banner' %>
         <%= yield %>
       </div>
     </section>

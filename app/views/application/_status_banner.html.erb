@@ -1,0 +1,7 @@
+<div class="notification">
+  <h2 class="title is-5">Welcome, <%= signed_in? ? current_user.full_name : 'Guest' %>!</h2>
+
+  <% if @contest %>
+    <p><b><%= t 'judge.time_remaining' %>:</b> <span id="time-banner" data-end=<%= @contest.end_datetime || -1 %>></span></p>
+  <% end %>
+</div>
