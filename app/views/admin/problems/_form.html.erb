@@ -14,7 +14,7 @@
   </div>
   <hr />
   <div class="field">
-    <%= f.label :problem_data, "Upload problem data (*.in, *.out)", class: "label has-text-weight-normal" %>
+    <%= f.label :problem_data, "#{t 'problems.form.upload_prompt'} (*.in, *.out)", class: "label has-text-weight-normal" %>
     <div class="control">
       <%= f.file_field :problem_data, multiple: true %>
     </div>

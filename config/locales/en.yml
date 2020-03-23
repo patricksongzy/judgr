@@ -37,7 +37,12 @@ en:
     contest_policy:
       show?: Contest has not yet opened for viewing.
 
+  greetings:
+    welcome: Welcome
+
   contests:
+    form:
+      create: Create Contest
     name: Contest Name
     open: Open
     closed: Closed
@@ -58,10 +63,16 @@ en:
     contest_closed: contest has closed.
 
   problems:
+    form:
+      add: Add Problem
+      upload_prompt: Upload problem data
     name: Problem Name
     description: "<h2 class=\"title is-5\">Problem Description</h2>\n<p>\nPut the problem description here.\n</p>\n<br>\n<h2 class=\"title is-5\">Input Specification</h2>\n<p>\nPut the input specification here.\n</p>\n<br>\n<h2 class=\"title is-5\">Output Specification</h2>\n<p>\nPut the output specification here.\n</p>\n<br>"
     not_signed_in: not signed in.
     no_submissions_made: no submissions have been made yet.
+    test_data: Test Data
+    test_case: Test Case
+    output_file: Output File
 
   submissions:
     form:
@@ -78,6 +89,11 @@ en:
   errors:
     error_message: There was a problem.
 
+  actions:
+    edit: Edit
+    delete: Delete
+    edit_name: Edit Name
+
   forms:
     error_message:
       one: There was a problem with this form.
@@ -85,6 +101,9 @@ en:
 
   activerecord:
     models:
+      user:
+        one: User
+        other: Users
       contest:
         one: Contest
         other: Contests

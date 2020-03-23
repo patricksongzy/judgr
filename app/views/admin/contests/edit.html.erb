@@ -2,13 +2,13 @@
 
 <div class="container">
   <% if @contest.problems.length > 0 %>
-    <h2 class="title is-4">Problems</h2>
+    <h2 class="title is-4"><%= Problem.model_name.human count: :many %></h2>
     <table class="table is-hoverable is-fullwidth">
       <thead>
         <tr>
-          <th>Problem Name</th>
-          <th>Edit</th>
-          <th>Delete</th>
+          <th><%= t 'problems.name' %></th>
+          <th><%= t 'actions.edit' %></th>
+          <th><%= t 'actions.delete' %></th>
         </tr>
       </thead>
       <tbody>
@@ -16,10 +16,10 @@
           <tr>
             <%= render partial: 'problems/problem', locals: {problem: problem} %>
             <td>
-              <%= button_to "Edit", edit_admin_contest_problem_path(@contest, problem), method: :get, class: "button" %>
+              <%= button_to t('actions.edit'), edit_admin_contest_problem_path(@contest, problem), method: :get, class: "button" %>
             </td>
             <td>
-              <%= button_to "Delete", admin_contest_problem_path(@contest, problem), method: :delete, class: "button is-danger" %>
+              <%= button_to t('actions.delete'), admin_contest_problem_path(@contest, problem), method: :delete, class: "button is-danger" %>
             </td>
           </tr>
         <% end %>
@@ -30,12 +30,12 @@
 
 <section class="section">
   <div class="box">
-    <h2 class="title is-4">Edit Name</h2>
+    <h2 class="title is-4"><%= t 'actions.edit_name' %></h2>
     <%= render partial: 'admin/contests/form' %> 
   </div>
 
   <div class="box">
-    <h2 class="title is-4">Add Problem</h2>
+    <h2 class="title is-4"><%= t 'problems.form.add' %></h2>
     <%= render partial: 'admin/problems/form' %>
   </div>
 </section>

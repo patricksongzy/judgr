@@ -175,9 +175,9 @@ class Submission < ApplicationRecord
   end
 
   ##
-  # Gets the submission score.
+  # Gets the submission score formatted out of the maximum possible score.
   #
-  def get_score
+  def get_formatted_score
     return "#{score} / #{problem.get_max_score}"
   end
 

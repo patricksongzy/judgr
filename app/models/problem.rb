@@ -81,22 +81,37 @@ class Problem < ApplicationRecord
     @test_data
   end
 
+  def get_sorted_scores
+    users = Set.new
+    for submission in submissions
+      users << submission.user
+    end
+
+    sorted = []
+    for user in users
+      sorted << [user] + get_score(user)
+    end
+
+    sorted.sort_by! do |score|
+      _, submission, _ = score
+      submission.score
+    end.reverse!
+  end
+
   ##
   # Gets the top score of the user for the problem.
   #
   def get_score(user)
-    max_score = get_max_score
-
     if user.nil?
-      return 0, max_score, I18n.t('problems.not_signed_in')
+      return nil, I18n.t('problems.not_signed_in')
     end
 
     submissions = Submission.where(:user => user, :problem => self)
     if submissions.empty?
-      return 0, max_score, I18n.t('problems.no_submissions_made')
+      return nil, I18n.t('problems.no_submissions_made')
     else
-      score = submissions.maximum(:score)
-      return score, max_score, "#{score} / #{get_max_score}"
+      submission = submissions.order('score DESC').first
+      return submission, submission.get_formatted_score
     end
   end
 

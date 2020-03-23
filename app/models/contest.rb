@@ -39,9 +39,9 @@ class Contest < ApplicationRecord
     max_score = 0
 
     for problem in problems
-      score, problem_max_score, _ = problem.get_score(user)
-      total_score += score
-      max_score += problem_max_score
+      submission, _ = problem.get_score(user)
+      total_score += submission.score if submission
+      max_score += problem.get_max_score
     end
 
     return total_score, max_score, "#{total_score} / #{max_score}"

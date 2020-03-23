@@ -8,7 +8,11 @@ en:
         user:
           attributes:
             email:
+              blank: is required.
+              invalid: is invalid.
               taken: has already been taken.
+            full_name:
+              blank: is required.
             password:
               blank: is required.
             password_confirmation:
