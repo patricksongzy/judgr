@@ -1,4 +1,10 @@
-<h1><%= "#{@submission.id} #{@submission.language.name}" %></h1>
-<code>
-  <%= @submission.code %>
-</code>
+<%= render partial: 'application/breadcrumb', locals: {model: @submission} %>
+<%= render partial: 'application/time_banner' %>
+<h1 class="title"><%= @submission.get_name %></h1>
+<div class="notification <%= @submission.success? ? 'is-success' : @submission.success.nil? ? 'is-warning' : 'is-danger' %>">
+  <p><%= @submission.get_message %></p>
+  <b>Score: <%= @submission.get_score %></b>
+</div>
+<pre>
+<%= @submission.code %>
+</pre>

@@ -1,0 +1,7 @@
+<td width="100%" style="min-width: 20rem">
+  <div class="content">
+    <p class="title is-5"><%= link_to contest.name, contest_path(contest) %> <span class="tag <%= contest.has_ended? ? 'is-danger' : contest.has_started? ? 'is-success' : 'is-warning' %>"><%= contest.get_status %></span></p>
+    <p class="subtitle is-6"><%= contest.get_human_dates %></p>
+  </div>
+</td>
+

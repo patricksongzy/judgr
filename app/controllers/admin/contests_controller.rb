@@ -1,14 +1,18 @@
+require 'date'
+
 class Admin::ContestsController < ApplicationController
   include ContestsHelper
 
   before_action :require_login
 
   def index
-    @contests = Contest.all
-    authorize [:admin, @contests]
+    all_unordered = Contest.all
+    authorize [:admin, all_unordered]
+
+    @contests = get_contests_ordered(all_unordered)
 
     @contest = Contest.new
-    authorize [:admin, @contests]
+    authorize [:admin, @contest]
   end
   
   def new
@@ -19,7 +23,7 @@ class Admin::ContestsController < ApplicationController
   def create
     @contest = Contest.new(contest_params)
     authorize [:admin, @contest]
-
+    
     @contest.save!
 
     redirect_to contest_path(@contest)
@@ -28,6 +32,9 @@ class Admin::ContestsController < ApplicationController
   def edit
     @contest = Contest.find(params[:id])
     authorize [:admin, @contest]
+
+    @contest.start_date, @contest.start_time = @contest.get_start
+    @contest.end_date, @contest.end_time = @contest.get_end
 
     @problem = Problem.new
     authorize [:admin, @problem]
@@ -38,6 +45,7 @@ class Admin::ContestsController < ApplicationController
     authorize [:admin, @contest]
 
     @contest.update(contest_params)
+    puts contest_params
 
     redirect_to contest_path(@contest)
   end

@@ -1,13 +1,23 @@
 <%= form_for [:admin, @contest] do |f| %>
-  <ul>
-    <% @contest.errors.full_messages.each do |error| %>
-      <li><%= error %></li>
-    <% end %>
-  </ul>
+  <%= render partial: 'application/form_errors', locals: {error: :contest_error} %>
   <div class="field">
     <%= f.label :name, class: "label" %>
     <div class="control">
       <%= f.text_field :name, class: "input" %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :start_datetime, class: "label" %>
+    <div class="control">
+      <%= f.date_field :start_date, value: @contest.start_date %>
+      <%= f.time_field :start_time, value: @contest.start_time, step: 1 %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.label :end_datetime, class: "label" %>
+    <div class="control">
+      <%= f.date_field :end_date, value: @contest.end_date %>
+      <%= f.time_field :end_time, value: @contest.end_time, step: 1 %>
     </div>
   </div>
   <div class="field">

@@ -22,11 +22,11 @@ class SubmissionPolicy
   end
 
   def show?
-    user.present? and user == submission.user
+    user.present? and (user.admin? or user == submission.user)
   end
 
   def create?
-    user.present?
+    user.present? and submission.problem.contest.is_open?
   end
 end
 

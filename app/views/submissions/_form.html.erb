@@ -1,15 +1,11 @@
-<% if policy(@submission).create? %>
+<% if policy(@contest).submit? %>
   <div class="box">
-    <h2 class="title is-4">Create Submission</h2>
+    <h2 class="title is-4"><%= t 'submissions.form.create' %></h2>
     <% if @contest.problems.empty? %>
-      <p>No problems currently in contest.</p>
+      <p><%= t 'submissions.form.no_problems' %></p>
     <% else %>
       <%= form_for @submission do |f| %>
-        <ul>
-          <% @submission.errors.full_messages.each do |error| %>
-            <li><%= error %></li>
-          <% end %>
-        </ul>
+        <%= render partial: 'application/form_errors', locals: {error: :submission_error} %>
         <% if @problem.nil? %>
           <div class="field">
             <%= f.label :problem_id, class: "label" %>
@@ -23,20 +19,17 @@
           <%= f.hidden_field :problem_id, :value => @problem.id %>
         <% end %>
         <div class="field">
-          <%= f.label :language_id, class: "label" %>
+          <%= f.label :code_file, "#{t 'submissions.form.upload_prompt'} (*.java *.py *.c)", class: "label has-text-weight-normal" %>
           <div class="control">
-            <div class="select">
-              <%= f.collection_select :language_id, Language.order(:name), :id, :name, include_blank: false %>
+            <%= f.file_field :code_file %>
+          </div>
+        </div>
+        <div class="field">
+          <article class="message is-warning">
+            <div class="message-body">
+              <%= t 'submissions.form.warning_message' %>
             </div>
-          </div>
-        </div>
-        <div class="field">
-          <%= f.label :code, class: "label" %>
-          <div class="control">
-            <%= f.text_area :code, class: "textarea code" %>
-          </div>
-        </div>
-        <div class="field">
+          </article>
           <div class="control">
             <%= f.submit class: "button is-primary" %>
           </div>

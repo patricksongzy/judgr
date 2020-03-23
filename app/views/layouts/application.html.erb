@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="has-navbar-fixed-top">
   <head>
     <title>Judgr</title>
     <%= csrf_meta_tags %>
@@ -7,34 +7,50 @@
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <script type="text/javascript">
+      window.I18n = <%= get_translations('timer').to_json.html_safe %>
+    </script>
+
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+      document.addEventListener('turbolinks:load', () => {
+        MathJax.Hub.Typeset();
+      });
+    </script>
   </head>
 
   <body>
-    <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
+    <nav class="navbar has-shadow is-fixed-top" role="navigation" aria-label="main navigation">
       <div class="container">
         <div class="navbar-brand">
           <h1 class="navbar-item">
             <strong>Judgr</strong>
           </h1>
+
+          <a role="button" class="navbar-burger" data-target="navMenu" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
         </div>
-        <div class="navbar-menu">
+        <div class="navbar-menu" id="navMenu">
           <div class="navbar-start">
             <%= link_to "Contests", contests_path, class: "navbar-item" %>
           </div>
           <div class="navbar-end">
-            <div class="navbar-item">
-              <% if signed_in? %>
-                <%= link_to 'Sign out', sign_out_path, method: :delete, class: "button is-light" %>
-              <% else %>
-                <%= link_to 'Sign in', sign_in_path, class: "button is-light" %>
-              <% end %>
-            </div>
+            <% if signed_in? %>
+              <%= link_to 'Sign out', sign_out_path, method: :delete, class: "navbar-item" %>
+            <% else %>
+              <%= link_to 'Sign in', sign_in_path, class: "navbar-item" %>
+            <% end %>
           </div>
         </div>
       </div>
     </nav>
     <section class="section">
       <div class="container">
+        <%= render partial: 'application/errors', locals: {error: :application_error, locale_prompt: 'errors.error_message'} %>
         <%= yield %>
       </div>
     </section>

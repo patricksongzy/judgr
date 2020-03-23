@@ -22,6 +22,10 @@ class ContestPolicy
   end
 
   def show?
-    true
+    contest.has_started? or (user.present? and user.admin?)
+  end
+
+  def submit?
+    user.present? and contest.is_open?
   end
 end

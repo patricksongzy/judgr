@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_01_045709) do
+ActiveRecord::Schema.define(version: 2020_03_16_152338) do
 
   create_table "contests", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "name"
+    t.integer "start_datetime"
+    t.integer "end_datetime"
   end
 
   create_table "languages", force: :cascade do |t|
@@ -29,6 +31,8 @@ ActiveRecord::Schema.define(version: 2020_03_01_045709) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "contest_id"
+    t.string "uuid"
+    t.integer "time_limit", default: 2
     t.index ["contest_id"], name: "index_problems_on_contest_id"
   end
 
@@ -36,19 +40,15 @@ ActiveRecord::Schema.define(version: 2020_03_01_045709) do
     t.text "code"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "problem_id"
     t.integer "language_id"
+    t.integer "problem_id"
     t.integer "user_id"
+    t.string "message"
+    t.integer "score"
+    t.boolean "success"
     t.index ["language_id"], name: "index_submissions_on_language_id"
     t.index ["problem_id"], name: "index_submissions_on_problem_id"
     t.index ["user_id"], name: "index_submissions_on_user_id"
-  end
-
-  create_table "test_batches", force: :cascade do |t|
-    t.integer "problem_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["problem_id"], name: "index_test_batches_on_problem_id"
   end
 
   create_table "users", force: :cascade do |t|

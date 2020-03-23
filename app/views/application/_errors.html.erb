@@ -1,0 +1,10 @@
+<% if flash[error] %>
+  <div class="content notification is-danger">
+    <b><%= t locale_prompt, count: Array(flash[error]).length %></b>
+    <ul>
+      <% Array(flash[error])&.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
