@@ -31,9 +31,63 @@
 
 en:
   pundit:
-    default: "Unauthorized action."
+    default: Unauthorized action.
     submission_policy:
-      create?: "Contest is no longer accepting submissions."
+      create?: Contest is no longer accepting submissions.
     contest_policy:
-      show?: "Contest has not yet opened for viewing."
-  problem_description: "<h2 class=\"title is-5\">Problem Description</h2>\n<p>\nPut the problem description here.\n</p>\n<br />\n<h2 class=\"title is-5\">Input Specification</h2>\n<p>\nPut the input specification here.\n</p>\n<br />\n<h2 class=\"title is-5\">Output Specification</h2>\n<p>\nPut the output specification here.\n</p>\n<br />"
+      show?: Contest has not yet opened for viewing.
+
+  contests:
+    name: Contest Name
+    open: Open
+    closed: Closed
+    scheduled: Scheduled
+    opened_time_ago: Contest opened %{time_to} ago
+    opens_in_time: Contest opens in %{time_to}
+    and_closed_time_ago: and closed %{time_to} ago
+    and_closes_in_time: and closes in %{time_to}
+
+  login:
+    warning: Any attempts to gain unauthorized access to this system are prohibited.
+
+  timer:
+    hours: hours
+    minutes: minutes
+    seconds: seconds
+    contest_closed: contest has closed.
+
+  problems:
+    name: Problem Name
+    description: "<h2 class=\"title is-5\">Problem Description</h2>\n<p>\nPut the problem description here.\n</p>\n<br>\n<h2 class=\"title is-5\">Input Specification</h2>\n<p>\nPut the input specification here.\n</p>\n<br>\n<h2 class=\"title is-5\">Output Specification</h2>\n<p>\nPut the output specification here.\n</p>\n<br>"
+    not_signed_in: not signed in.
+    no_submissions_made: no submissions have been made yet.
+
+  submissions:
+    form:
+      create: Create Submission
+      no_problems: No problems currently in contest.
+      upload_prompt: Upload a submission
+      warning_message: Any attempts to run malicious code, circumvent security measures, or abuse this system, are prohibited, and may result in immediate account suspension, including disqualification from future contests.
+
+  judge:
+    message: Message
+    score: Score
+    time_remaining: Time Remaining
+
+  forms:
+    error_message:
+      one: There was a problem with this form.
+      other: There were problems with this form.
+
+  activerecord:
+    models:
+      contest:
+        one: Contest
+        other: Contests
+      problem:
+        one: Problem
+        other: Problems
+      submission:
+        one: Submission
+        other: Submissions
+

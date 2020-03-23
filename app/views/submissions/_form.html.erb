@@ -1,8 +1,8 @@
 <% if policy(@contest).submit? %>
   <div class="box">
-    <h2 class="title is-4">Create Submission</h2>
+    <h2 class="title is-4"><%= t 'submissions.form.create' %></h2>
     <% if @contest.problems.empty? %>
-      <p>No problems currently in contest.</p>
+      <p><%= t 'submissions.form.no_problems' %></p>
     <% else %>
       <%= form_for @submission do |f| %>
         <%= render partial: 'application/form_errors', locals: {error: :submission_error} %>
@@ -19,7 +19,7 @@
           <%= f.hidden_field :problem_id, :value => @problem.id %>
         <% end %>
         <div class="field">
-          <%= f.label :code_file, "Upload a submission (*.java *.py *.c)", class: "label has-text-weight-normal" %>
+          <%= f.label :code_file, "#{t 'submissions.form.upload_prompt'} (*.java *.py *.c)", class: "label has-text-weight-normal" %>
           <div class="control">
             <%= f.file_field :code_file %>
           </div>
@@ -27,7 +27,7 @@
         <div class="field">
           <article class="message is-warning">
             <div class="message-body">
-              Any attempts to run malicious code, to circumvent security measures, or to abuse this system, are prohibited, and may result in immediate account suspension, including disqualification from future contests.
+              <%= t 'submissions.form.warning_message' %>
             </div>
           </article>
           <div class="control">

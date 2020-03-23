@@ -1,4 +1,4 @@
-<h1 class="title">Contests</h1>
+<h1 class="title"><%= Contest.model_name.human count: :many %></h1>
 <% if @contests.length > 0 %>
   <div class="table-container">
     <table class="table is-hoverable is-fullwidth">

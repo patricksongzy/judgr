@@ -17,7 +17,7 @@ class Problem < ApplicationRecord
   #
   def get_description
     return description if description
-    I18n.t('problem_description')
+    I18n.t('problems.description')
   end
 
   ##
@@ -88,12 +88,12 @@ class Problem < ApplicationRecord
     max_score = get_max_score
 
     if user.nil?
-      return 0, max_score, "not signed in."
+      return 0, max_score, I18n.t('problems.not_signed_in')
     end
 
     submissions = Submission.where(:user => user, :problem => self)
     if submissions.empty?
-      return 0, max_score, "no submissions have been made yet."
+      return 0, max_score, I18n.t('problems.no_submissions_made')
     else
       score = submissions.maximum(:score)
       return score, max_score, "#{score} / #{get_max_score}"

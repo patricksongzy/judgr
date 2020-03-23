@@ -19,20 +19,20 @@ function updateBanner(banner, endTime) {
   let remaining = endTime - now;
 
   if (remaining <= 0) {
-    banner.textContent = "contest has closed.";
+    banner.textContent = "<%= I18n.t 'timer.contest_closed' %>";
     stopInterval();
   } else {
     let hours = Math.floor(remaining / 3600);
     let minutes = Math.floor(remaining / 60 % 60);
     let seconds = Math.floor(remaining % 60 % 60);
 
-    banner.textContent = hours + " hours, " + minutes + " minutes, " + seconds + " seconds.";
+    banner.textContent = hours + " <%= I18n.t 'timer.hours' %>, " + minutes + " <%= I18n.t 'timer.minutes' %>, " + seconds + " <%= I18n.t 'timer.seconds' %>.";
   }
 }
 
 document.addEventListener('turbolinks:load', () => {
   let banner = document.getElementById('time-banner');
-  let endTime = 1584913884;
+  let endTime = 1585022726;
   
   stopInterval();
   if (banner != null) {

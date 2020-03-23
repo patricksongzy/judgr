@@ -28,7 +28,7 @@ class Contest < ApplicationRecord
 
     ancestors << [name, path]
     # contest is the last level of paths to return
-    ancestors << ["Contests", index_path]
+    ancestors << [Contest.model_name.human(count: :many), index_path]
   end
 
   ##
@@ -74,13 +74,13 @@ class Contest < ApplicationRecord
     # some contests do not have a close date
     if end_datetime
       time_to_end = distance_of_time_in_words_to_now(end_datetime)
-      end_message = now >= end_datetime ? " and closed #{time_to_end} ago" : " and closes in #{time_to_end}"
+      end_message = now >= end_datetime ? " #{I18n.t 'contests.and_closed_time_ago', time_to: time_to_end}" : " #{I18n.t 'contests.and_closes_in_time', time_to: time_to_end}"
     end
     
     if now >= start_datetime
-      "Contest opened #{time_to_start} ago#{end_message}."
+      "#{I18n.t 'contests.opened_time_ago', time_to: time_to_start}#{end_message}."
     else
-      "Contest opens in #{time_to_start}#{end_message}."
+      "#{I18n.t 'contests.opens_in_time', time_to: time_to_start}#{end_message}."
     end
   end
 
@@ -106,7 +106,7 @@ class Contest < ApplicationRecord
   # Gets the status of the contest.
   #
   def get_status
-    has_ended? ? 'Closed' : has_started? ? 'Open' : 'Scheduled'
+    has_ended? ? I18n.t('contests.closed') : has_started? ? I18n.t('contests.open') : I18n.t('contests.scheduled')
   end
 
   ##
