@@ -1,5 +1,4 @@
 <%= render partial: 'application/breadcrumb', locals: {model: @contest} %>
-<%= render partial: 'application/time_banner' %>
 <h1 class="title"><%= @contest.name %></h1>
 <h1 class="title is-4"><%= Problem.model_name.human count: :many %></h1>
 <%= render partial: 'application/score_banner', locals: {model: @contest} %>

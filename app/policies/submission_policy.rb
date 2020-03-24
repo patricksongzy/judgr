@@ -22,11 +22,18 @@ class SubmissionPolicy
   end
 
   def show?
-    user.present? and (user.admin? or user == submission.user)
+    raise Pundit::NotAuthorizedError, "users.must_log_in" unless user.present?
+    raise Pundit::NotAuthorizedError, "users.unauthorized" unless (user.admin? or user == submission.user)
+
+    true
   end
 
   def create?
-    user.present? and submission.problem.contest.is_open?
+    raise Pundit::NotAuthorizedError, "users.must_log_in" unless user.present?
+    raise Pundit::NotAuthorizedError, "contests.must_be_open" unless submission.problem.contest.is_open?
+    raise Pundit::NotAuthorizedError, "users.request_limit_reached" unless (Time.now.to_i - (user.last_request || 0) > 60)
+    
+    true
   end
 end
 

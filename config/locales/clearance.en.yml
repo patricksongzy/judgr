@@ -1,5 +1,22 @@
 ---
 en:
+  activerecord:
+    errors:
+      messages:
+        confirmation: doesn't match.
+      models:
+        user:
+          attributes:
+            email:
+              blank: is required.
+              invalid: is invalid.
+              taken: has already been taken.
+            full_name:
+              blank: is required.
+            password:
+              blank: is required.
+            password_confirmation:
+              blank: is required.
   clearance:
     models:
       clearance_mailer:
@@ -59,6 +76,7 @@ en:
     new:
       title: Sign in
   users:
+    suspended: Your account has been suspended.
     new:
       sign_in: Sign in
       title: Sign up

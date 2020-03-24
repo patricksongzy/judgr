@@ -1,5 +1,4 @@
 <%= render partial: 'application/breadcrumb', locals: {model: @problem} %>
-<%= render partial: 'application/time_banner' %>
 <h1 class="title"><%= @problem.name %></h1>
 <%= render partial: 'application/score_banner', locals: {model: @problem} %>
 <%= simple_format sanitize @problem.description.squish %>
