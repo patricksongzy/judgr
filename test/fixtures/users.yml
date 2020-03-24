@@ -1,0 +1,8 @@
+default:
+  full_name: "Default User"
+  email: ""
+  role: "default"
+  is_suspended: false
+  last_request: 0
+  encrypted_password: ""
+  remember_token: <%= SecureRandom.hex(20) %>

@@ -4,9 +4,9 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 
-happy_or_sad:
-  name: "Problem J2: Happy or Sad"
-  description: "We often include emoticons in our text messages to indicate how we are feeling. The three consecutive characters ':-)' indicate a happy face and the three consecutive characters ':-(' indicate a sad face. Write a program to determine the overall mood of a message."
-  contest: ccc_2015
+default:
+  name: "Default Problem"
+  description: "Description"
+  contest: default
   uuid: <%= SecureRandom.uuid %>
   time_limit: 2

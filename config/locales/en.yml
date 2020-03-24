@@ -94,6 +94,8 @@ en:
     time_remaining: Time Remaining
 
   errors:
+    messages:
+      required: is required.
     error_message: There was a problem.
 
   actions:

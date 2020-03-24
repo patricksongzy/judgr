@@ -1,6 +1,6 @@
 class SuspendedGuard < Clearance::SignInGuard
   def call
-    if current_user.is_suspended?
+    if current_user and current_user.is_suspended?
       failure(I18n.t 'users.suspended')
     else
       next_guard

@@ -25,7 +25,7 @@ class SubmissionsController < ApplicationController
     else
       flash[:submission_error] = @submission.errors.full_messages
       flash.keep
-      redirect_to request.referrer
+      redirect_to request.referrer || root_path
     end
   end
 end

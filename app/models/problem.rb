@@ -28,7 +28,7 @@ class Problem < ApplicationRecord
     
     # determine which path to return
     if is_editing
-      path = edit_admin_contest_problem_path(self)
+      path = edit_admin_contest_problem_path(contest, self)
     else
       path = problem_path(self)
     end

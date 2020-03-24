@@ -50,16 +50,19 @@ class Contest < ApplicationRecord
   ##
   # Gets the epoch from an ISO date and time.
   #
-  def get_epoch(iso_date, time)
-    DateTime.parse("#{iso_date} #{time}".strip).change(offset: (Time.now.utc_offset / 3600).to_s)
+  def self.get_epoch(iso_date, time)
+    DateTime.parse("#{iso_date} #{time}".strip).change(offset: (Time.now.utc_offset / 3600).to_s).to_i
   end
 
   ##
   # Gets the ISO formatted date from epoch.
   #
-  def get_iso(epoch)
+  def self.get_iso(epoch)
     if epoch
-      time = Time.at(epoch)
+      time_at = Time.at(epoch)
+      now = Time.now
+
+      time = (time_at + (now.utc_offset - time_at.utc_offset)).to_datetime.change(offset: (now.utc_offset / 3600).to_s)
       return time.strftime("%Y-%m-%d"), time.strftime("%H:%M:%S")
     end
   end
