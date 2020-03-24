@@ -1,0 +1,29 @@
+<h1 class="title"><%= User.model_name.human count: :many %></h1>
+
+<div class="container">
+  <table class="table is-hoverable is-fullwidth">
+    <thead>
+      <tr>
+        <th><%= t 'users.full_name' %></th>
+        <th><%= t 'users.email' %></th>
+        <th><%= t 'users.suspended' %></th>
+        <th><%= t 'users.actions.suspend' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.full_name %></td>
+          <td><%= user.email %></td>
+          <td><%= user.is_suspended? ? t('responses.yes') : t('responses.no') %></td>
+          <td>
+            <%= form_for [:admin, user] do |f| %>
+              <%= f.hidden_field :is_suspended, value: !user.is_suspended %>
+              <%= f.submit t(user.is_suspended? ? 'users.actions.unsuspend' : 'users.actions.suspend'), class: "button is-danger", disabled: user == current_user %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -1,3 +1,13 @@
+class SuspendedGuard < Clearance::SignInGuard
+  def call
+    if current_user.is_suspended?
+      failure(I18n.t 'users.suspended')
+    else
+      next_guard
+    end
+  end
+end
+
 Clearance.configure do |config|
   config.routes = false
   config.mailer_sender = "reply@example.com"
@@ -8,4 +18,5 @@ Clearance.configure do |config|
   config.cookie_domain = "localhost"
   config.cookie_expiration = lambda { |cookies| 1.year.from_now.utc }
   config.cookie_name = "remember_token"
+  config.sign_in_guards = [SuspendedGuard]
 end

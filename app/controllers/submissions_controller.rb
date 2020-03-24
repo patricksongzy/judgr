@@ -15,6 +15,9 @@ class SubmissionsController < ApplicationController
     @submission.create(current_user)
 
     if @submission.valid?
+      current_user.last_request = Time.now.to_i
+      current_user.save!
+
       @submission.save!
       ProcessSubmissionJob.perform_later @submission
 

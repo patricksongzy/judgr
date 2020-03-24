@@ -31,14 +31,21 @@
 
 en:
   pundit:
-    default: Unauthorized action.
-    submission_policy:
-      create?: Contest is no longer accepting submissions.
-    contest_policy:
-      show?: Contest has not yet opened for viewing.
+    users:
+      must_log_in: You must be logged in to perform this action.
+      unauthorized: You are accessing an unauthorized resource.
+      request_limit_reached: You cannot submit more than once per minute.
+    contests:
+      not_opened: Contest has not yet opened for viewing.
+      has_closed: Contest is no longer accepting submissions.
+    default: You have attempted an unauthorized action.
 
   greetings:
     welcome: Welcome
+
+  responses:
+    yes: Yes
+    no: No
 
   contests:
     form:
@@ -98,6 +105,14 @@ en:
     error_message:
       one: There was a problem with this form.
       other: There were problems with this form.
+
+  users:
+    full_name: Full Name
+    email: Email
+    suspended: Suspended
+    actions:
+      suspend: Suspend
+      unsuspend: Unsuspend
 
   activerecord:
     models:

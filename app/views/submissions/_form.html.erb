@@ -16,7 +16,7 @@
             </div>
           </div>
         <% else %>
-          <%= f.hidden_field :problem_id, :value => @problem.id %>
+          <%= f.hidden_field :problem_id, value: @problem.id %>
         <% end %>
         <div class="field">
           <%= f.label :code_file, "#{t 'submissions.form.upload_prompt'} (*.java *.py *.c)", class: "label has-text-weight-normal" %>

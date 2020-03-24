@@ -22,10 +22,14 @@ class ContestPolicy
   end
 
   def show?
-    contest.has_started? or (user.present? and user.admin?)
+    raise Pundit::NotAuthorizedError, "contest.not_opened" unless (contest.has_started? or (user.present? and user.admin?))
+
+    true
   end
 
   def submit?
-    user.present? and contest.is_open?
+    raise Pundit::NotAuthorizedError, "contest.has_closed" unless contest.is_open?
+    
+    user.present?
   end
 end

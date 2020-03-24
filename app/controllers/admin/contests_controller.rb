@@ -45,7 +45,6 @@ class Admin::ContestsController < ApplicationController
     authorize [:admin, @contest]
 
     @contest.update(contest_params)
-    puts contest_params
 
     redirect_to contest_path(@contest)
   end
