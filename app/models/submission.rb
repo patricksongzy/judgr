@@ -221,7 +221,7 @@ class Submission < ApplicationRecord
   private
 
   def wrap_sandbox(command, memory_limit)
-    return "(ulimit -Sv #{memory_limit} -Hv #{memory_limit}; cpulimit -l 50 #{command})"
+    return "(ulimit -Sv #{memory_limit} -Hv #{memory_limit}; cpulimit -l 50 -- #{command})"
   end
 end
 
