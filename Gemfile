@@ -61,3 +61,5 @@ gem 'bulma-rails', '~>0.8'
 gem 'rack-attack', '~>6.2'
 
 gem 'google-cloud-storage', '~>1.25', require: false
+
+gem 'ruby-filemagic'

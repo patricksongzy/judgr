@@ -9,6 +9,13 @@ class Submission < ApplicationRecord
 
   attr_accessor :code_file
 
+  # memory limit for compilation
+  COMPILE_MEMORY_LIMIT = 2048000
+  # memory limit in kilobytes for ulimit
+  MEMORY_LIMIT = 256000
+  # code file size limit in bytes
+  CODE_SIZE_LIMIT = 128000
+
   ##
   # Gets the name of the submission.
   #
@@ -33,6 +40,16 @@ class Submission < ApplicationRecord
       errors.add(:submission, I18n.t('submissions.form.errors.required'))
       return
     else
+      if File.size(code_file) > CODE_SIZE_LIMIT
+        errors.add(:submission, I18n.t('submissions.form.errors.too_large'))
+        return
+      end
+
+      unless FileMagic.new(FileMagic::MAGIC_MIME).file(code_file.path).include? "text/"
+        errors.add(:submission, I18n.t('submissions.form.errors.binary_file'))
+        return
+      end
+
       allowed_extensions = Language.all.pluck(:extension)
       code_file_extension = File.extname(code_file.original_filename)
 
@@ -84,7 +101,7 @@ class Submission < ApplicationRecord
     # initialize the commands for the languages
     case language.name
     when "Java"
-      compile_command = "javac -d #{sb_compiled_directory} #{sb_source_path}"
+      compile_command = "javac -J-Xms32m -J-Xmx256m -d #{sb_compiled_directory} #{sb_source_path}"
       run_command = "java -cp #{sb_compiled_directory} Main"
     when "C"
       compile_command = "gcc -o #{sb_compiled_directory}Main.out #{sb_source_path}"
@@ -99,7 +116,7 @@ class Submission < ApplicationRecord
         # set a timeout to avoid compiler bombs
         Timeout.timeout(10) do
           # run the compilation in a sandbox for security reasons
-          cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'"))
+          cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT))
           _, _, status = cr.finish
 
           # ensure compilation is successful to proceed
@@ -124,7 +141,7 @@ class Submission < ApplicationRecord
         for input_file in test_data.keys.sort
           Timeout.timeout(time_limit + 5) do
             # add a memory limit, a CPU limit, and a time limit
-            cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'"))
+            cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT))
 
             File.open(input_file, "r") do |f|
               f.each_line do |line|
@@ -133,6 +150,7 @@ class Submission < ApplicationRecord
             end
 
             output_text, error_text, status = cr.finish
+            puts output_text
             puts error_text
 
             if status.exitstatus == 124
@@ -195,8 +213,8 @@ class Submission < ApplicationRecord
 
   private
 
-  def wrap_sandbox(command)
-    return "(ulimit -Hv 128000; cpulimit -l 50 -i #{command})"
+  def wrap_sandbox(command, memory_limit)
+    return "(ulimit -Sv #{memory_limit} -Hv #{memory_limit}; cpulimit -l 50 #{command})"
   end
 end
 

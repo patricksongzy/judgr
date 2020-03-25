@@ -88,6 +88,8 @@ en:
       upload_prompt: Upload a submission
       warning_message: Any attempts to run malicious code, circumvent security measures, or abuse this system, are prohibited, and may result in immediate account suspension, including disqualification from future contests.
       errors:
+        too_large: should not be greater than 128 kilobytes in size.
+        binary_file: should not contain a non-text file.
         unknown_language: has an unknown file extension '%{extension}'.
         required: is required.
 
