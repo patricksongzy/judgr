@@ -14,6 +14,8 @@ class Admin::ProblemsController < ApplicationController
     @problem = Problem.find(params[:id])
     authorize [:admin, @problem]
 
+    puts problem_params
+
     @problem.update(problem_params)
 
     if @problem.problem_data

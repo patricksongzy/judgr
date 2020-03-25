@@ -112,6 +112,7 @@ en:
     full_name: Full Name
     email: Email
     suspended: Suspended
+    suspended_message: Your account has been suspended for violations of policies and/or conditions regarding this system.
     actions:
       suspend: Suspend
       unsuspend: Unsuspend

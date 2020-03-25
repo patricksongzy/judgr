@@ -58,3 +58,5 @@ gem 'irb'
 gem 'clearance', '~> 2.1'
 gem 'pundit', '~>2.1'
 gem 'bulma-rails', '~>0.8'
+
+gem 'rack-attack', '~>6.2'

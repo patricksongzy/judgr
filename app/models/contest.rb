@@ -92,7 +92,7 @@ class Contest < ApplicationRecord
   #
   def get_start
     unless start_datetime.nil?
-      get_iso(start_datetime)
+      Contest.get_iso(start_datetime)
     end
   end
 
@@ -101,7 +101,7 @@ class Contest < ApplicationRecord
   #
   def get_end
     unless end_datetime.nil?
-      get_iso(end_datetime)
+      Contest.get_iso(end_datetime)
     end
   end
 
@@ -155,11 +155,11 @@ class Contest < ApplicationRecord
     if start_date.empty?
       self.start_datetime = Time.now.to_i
     else
-      self.start_datetime = get_epoch(start_date, start_time)
+      self.start_datetime = Contest.get_epoch(start_date, start_time)
     end
 
     unless end_date.empty?
-      self.end_datetime = get_epoch(end_date, end_time)
+      self.end_datetime = Contest.get_epoch(end_date, end_time)
     end
   end
 end

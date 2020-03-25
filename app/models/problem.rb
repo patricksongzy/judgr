@@ -7,7 +7,7 @@ class Problem < ApplicationRecord
   belongs_to :contest
 
   attr_accessor :problem_data
-  validates :problem_data, presence: true
+  validates :problem_data, presence: true, on: :create
 
   before_create :set_uuid
   before_destroy :delete_dataset
