@@ -2,6 +2,6 @@ bubblewrap
 cpulimit
 coreutils
 grep
-jre8-openjdk
-jdk8-openjdk
+openjdk-8-jre
+openjdk-8-jdk
 python

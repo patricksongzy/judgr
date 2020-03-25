@@ -1,5 +1,5 @@
 class Admin::UsersController < ApplicationController
-  include UsersHelper
+  include Admin::UsersHelper
 
   def index
     @users = User.all
