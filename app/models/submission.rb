@@ -116,7 +116,7 @@ class Submission < ApplicationRecord
         # set a timeout to avoid compiler bombs
         Timeout.timeout(10) do
           puts "compile command:"
-          puts wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'")
+          puts wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT)
           # run the compilation in a sandbox for security reasons
           cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT))
           message, _, status = cr.finish
@@ -145,7 +145,7 @@ class Submission < ApplicationRecord
         for input_file in test_data.keys.sort
           Timeout.timeout(time_limit + 5) do
             puts "run command:"
-            puts wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'")
+            puts wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT)
             # add a memory limit, a CPU limit, and a time limit
             cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT))
 
