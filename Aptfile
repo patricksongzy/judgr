@@ -2,3 +2,5 @@ bubblewrap
 cpulimit
 coreutils
 grep
+java
+python
