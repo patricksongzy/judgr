@@ -30,16 +30,20 @@ class Submission < ApplicationRecord
   #
   def create(current_user)
     if code_file.nil?
-      self.errors.add(:code_file)
+      errors.add(:submission, I18n.t('submissions.form.errors.required'))
       return
+    else
+      allowed_extensions = Language.all.pluck(:extension)
+      code_file_extension = File.extname(code_file.original_filename)
+
+      unless allowed_extensions.include? code_file_extension
+        errors.add(:submission, I18n.t('submissions.form.errors.unknown_language', extension: code_file_extension))
+        return
+      end
     end
 
+    problem.prepare_dataset
     language = Language.where(:extension => File.extname(code_file.original_filename)).first
-
-    if language == nil
-      self.errors.add(:language)
-      return
-    end
 
     self.language_id = language.id
     self.code = code_file.read

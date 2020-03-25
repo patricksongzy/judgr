@@ -2,6 +2,7 @@ require 'date'
 
 class Admin::ContestsController < ApplicationController
   include ContestsHelper
+  include Admin::ContestsHelper
 
   before_action :require_login
 

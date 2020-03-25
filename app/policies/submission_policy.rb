@@ -31,7 +31,7 @@ class SubmissionPolicy
   def create?
     raise Pundit::NotAuthorizedError, "users.must_log_in" unless user.present?
     raise Pundit::NotAuthorizedError, "contests.must_be_open" unless submission.problem.contest.is_open?
-    raise Pundit::NotAuthorizedError, "users.request_limit_reached" unless (Time.now.to_i - (user.last_request || 0) > 60)
+    raise Pundit::NotAuthorizedError, "users.request_limit_reached" unless (Time.now.to_i - (user.last_request || 0) > 60 or user.admin?)
     
     true
   end

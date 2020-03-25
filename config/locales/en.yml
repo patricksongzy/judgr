@@ -87,6 +87,9 @@ en:
       no_problems: No problems currently in contest.
       upload_prompt: Upload a submission
       warning_message: Any attempts to run malicious code, circumvent security measures, or abuse this system, are prohibited, and may result in immediate account suspension, including disqualification from future contests.
+      errors:
+        unknown_language: has an unknown file extension '%{extension}'.
+        required: is required.
 
   judge:
     message: Message

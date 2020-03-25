@@ -3,6 +3,8 @@ class ProblemsController < ApplicationController
     @problem = Problem.find(params[:id])
     authorize @problem
 
+    @problem.prepare_dataset
+
     @contest = @problem.contest
 
     @submission = Submission.new

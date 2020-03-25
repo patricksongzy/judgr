@@ -14,18 +14,20 @@ class SubmissionsController < ApplicationController
 
     @submission.create(current_user)
 
-    if @submission.valid?
-      current_user.last_request = Time.now.to_i
-      current_user.save!
+    if @submission.errors.empty?
+      if @submission.valid?
+        current_user.last_request = Time.now.to_i
+        current_user.save!
 
-      @submission.save!
-      ProcessSubmissionJob.perform_later @submission
+        @submission.save!
+        ProcessSubmissionJob.perform_later @submission
 
-      redirect_to submission_path(@submission)
+        redirect_to submission_path(@submission)
+      else
+        flash_errors
+      end
     else
-      flash[:submission_error] = @submission.errors.full_messages
-      flash.keep
-      redirect_to request.referrer || root_path
+      flash_errors
     end
   end
 end

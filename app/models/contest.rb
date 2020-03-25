@@ -4,7 +4,7 @@ class Contest < ApplicationRecord
   include Rails.application.routes.url_helpers
   include ActionView::Helpers::DateHelper
 
-  has_many :problems
+  has_many :problems, dependent: :destroy
 
   attr_accessor :start_date, :start_time, :end_date, :end_time
   validates :name, presence: true

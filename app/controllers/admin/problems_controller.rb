@@ -1,5 +1,5 @@
 class Admin::ProblemsController < ApplicationController
-  include ProblemsHelper
+  include Admin::ProblemsHelper
 
   before_action :require_login
 
@@ -19,7 +19,7 @@ class Admin::ProblemsController < ApplicationController
     @problem.update(problem_params)
 
     if @problem.problem_data
-      @problem.create_dataset
+      @problem.delete_local_dataset
     end
 
     redirect_to problem_path(@problem)
@@ -33,7 +33,6 @@ class Admin::ProblemsController < ApplicationController
 
     if @problem.valid?
       @problem.save!
-      @problem.create_dataset
 
       redirect_to problem_path(@problem)
     else

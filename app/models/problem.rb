@@ -3,14 +3,17 @@ require "#{Rails.root}/lib/console_runner/console_runner.rb"
 class Problem < ApplicationRecord
   include Rails.application.routes.url_helpers
 
-  has_many :submissions
+  has_many :submissions, dependent: :destroy
   belongs_to :contest
 
-  attr_accessor :problem_data
+  has_many_attached :problem_data
   validates :problem_data, presence: true, on: :create
+  validate :correct_problem_data_extensions
 
   before_create :set_uuid
   before_destroy :delete_dataset
+
+  DATASETS_PATH = "#{Rails.root}/datasets/"
 
   ##
   # Gets the problem description or a template to edit.
@@ -37,33 +40,14 @@ class Problem < ApplicationRecord
     ancestors += contest.get_ancestors(is_editing)
   end
 
-  ##
-  # Creates a dataset folder for the problem.
-  #
-  def create_dataset
-    cr = ConsoleRunner.new("rm -r #{ENV['JUDGR_DATASET_PATH']}#{uuid}")
+  def delete_local_dataset
+    cr = ConsoleRunner.new("rm -r #{DATASETS_PATH}#{uuid}")
     cr.finish
-    cr = ConsoleRunner.new("mkdir -p #{ENV['JUDGR_DATASET_PATH']}#{uuid}")
-    cr.finish
+  end
 
-    @test_data = Hash.new
-    for test_datum in problem_data
-      file_extension = File.extname(test_datum)
-      # filter out unwanted files
-      unless [".in", ".out"].include? file_extension
-        next
-      end
-
-      file_path = "#{ENV['JUDGR_DATASET_PATH']}#{uuid}/#{test_datum.original_filename}"
-
-      File.open(file_path, "w") do |f|
-        f.write(test_datum.read)
-      end
-
-      # link the output file with its respective input file
-      if file_extension == ".out"
-        @test_data[file_path.chomp(".in") << ".out"] = file_path
-      end
+  def prepare_dataset
+    unless Dir.exist? "#{DATASETS_PATH}#{uuid}"
+      create_dataset
     end
   end
 
@@ -73,7 +57,7 @@ class Problem < ApplicationRecord
   def get_data()
     if @test_data.nil?
       @test_data = Hash.new
-      for f in Dir.glob("#{ENV['JUDGR_DATASET_PATH']}#{uuid}/*.in")
+      for f in Dir.glob("#{DATASETS_PATH}#{uuid}/*.in")
         @test_data[f] = f.chomp('.in') << '.out'
       end
     end
@@ -124,6 +108,14 @@ class Problem < ApplicationRecord
 
   private
 
+  def correct_problem_data_extensions
+    problem_data&.each do |datum|
+      unless ['.in', '.out'].include? datum.filename.extension_with_delimiter
+        datum.purge
+      end
+    end
+  end
+
   ##
   # Initializes the problem UUID to avoid collisions between deleted problems and new ones.
   #
@@ -132,10 +124,32 @@ class Problem < ApplicationRecord
   end
 
   ##
+  # Creates a dataset folder for the problem.
+  #
+  def create_dataset
+    cr = ConsoleRunner.new("mkdir -p #{DATASETS_PATH}#{uuid}")
+    cr.finish
+
+    @test_data = Hash.new
+    for test_datum in problem_data
+      file_path = "#{DATASETS_PATH}#{uuid}/#{test_datum.filename.sanitized}"
+
+      File.open(file_path, "w") do |f|
+        f.write(test_datum.download)
+      end
+
+      # link the output file with its respective input file
+      if test_datum.filename.extension_with_delimiter == ".out"
+        @test_data[file_path.chomp(".in") << ".out"] = file_path
+      end
+    end
+  end
+
+  ##
   # Deletes the dataset folder for the problem.
   #
   def delete_dataset
-    cr = ConsoleRunner.new("rm -r #{ENV['JUDGR_DATASET_PATH']}#{uuid}")
-    cr.finish
+    problem_data.each { |datum| datum.purge }
+    delete_local_dataset
   end
 end
