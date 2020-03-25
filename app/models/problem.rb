@@ -41,9 +41,9 @@ class Problem < ApplicationRecord
   # Creates a dataset folder for the problem.
   #
   def create_dataset
-    cr = ConsoleRunner.new("rm -r #{Rails.root}/datasets/#{uuid}")
+    cr = ConsoleRunner.new("rm -r #{ENV['JUDGR_DATASET_PATH']}#{uuid}")
     cr.finish
-    cr = ConsoleRunner.new("mkdir -p #{Rails.root}/datasets/#{uuid}")
+    cr = ConsoleRunner.new("mkdir -p #{ENV['JUDGR_DATASET_PATH']}#{uuid}")
     cr.finish
 
     @test_data = Hash.new
@@ -54,7 +54,7 @@ class Problem < ApplicationRecord
         next
       end
 
-      file_path = "#{Rails.root}/datasets/#{uuid}/#{test_datum.original_filename}"
+      file_path = "#{ENV['JUDGR_DATASET_PATH']}#{uuid}/#{test_datum.original_filename}"
 
       File.open(file_path, "w") do |f|
         f.write(test_datum.read)
@@ -73,7 +73,7 @@ class Problem < ApplicationRecord
   def get_data()
     if @test_data.nil?
       @test_data = Hash.new
-      for f in Dir.glob("#{Rails.root}/datasets/#{uuid}/*.in")
+      for f in Dir.glob("#{ENV['JUDGR_DATASET_PATH']}#{uuid}/*.in")
         @test_data[f] = f.chomp('.in') << '.out'
       end
     end
@@ -135,7 +135,7 @@ class Problem < ApplicationRecord
   # Deletes the dataset folder for the problem.
   #
   def delete_dataset
-    cr = ConsoleRunner.new("rm -r #{Rails.root}/datasets/#{uuid}")
+    cr = ConsoleRunner.new("rm -r #{ENV['JUDGR_DATASET_PATH']}#{uuid}")
     cr.finish
   end
 end

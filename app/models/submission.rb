@@ -128,7 +128,8 @@ class Submission < ApplicationRecord
               end
             end
 
-            output_text, _, status = cr.finish
+            output_text, error_text, status = cr.finish
+            puts error_text
 
             if status.exitstatus == 124
               self.message = "Time limit exceeded."
