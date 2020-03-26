@@ -10,11 +10,13 @@ class Submission < ApplicationRecord
   attr_accessor :code_file
 
   # memory limit for compilation
-  COMPILE_MEMORY_LIMIT = 2048000
+  COMPILE_MEMORY_LIMIT = 4096000
   # memory limit in kilobytes for ulimit
-  MEMORY_LIMIT = 256000
+  MEMORY_LIMIT = 512000
   # code file size limit in bytes
   CODE_SIZE_LIMIT = 128000
+
+  JAVA_ARGS = "-Xmx192m -XX:+UseCompressedClassPointers -XX:CompressedClassSpaceSize=32m -XX:MaxMetaspaceSize=32m"
 
   ##
   # Gets the name of the submission.
@@ -98,11 +100,13 @@ class Submission < ApplicationRecord
     sb_compiled_directory = "/tmp/compiled/"
     # the location where the source file is stored in the sandbox
     sb_source_path = "#{sb_submission_directory}#{source_name}"
+    memory_offset = 0
     # initialize the commands for the languages
     case language.name
     when "Java"
-      compile_command = "javac -J-Xms32m -J-Xmx256m -d #{sb_compiled_directory} #{sb_source_path}"
-      run_command = "java -cp #{sb_compiled_directory} Main"
+      compile_command = "javac -d #{sb_compiled_directory} #{sb_source_path}"
+      run_command = "java #{JAVA_ARGS} -cp #{sb_compiled_directory} Main"
+      memory_offset = 512000
     when "C"
       compile_command = "gcc -o #{sb_compiled_directory}Main.out #{sb_source_path}"
       run_command = "./#{sb_compiled_directory}Main.out"
@@ -116,9 +120,9 @@ class Submission < ApplicationRecord
         # set a timeout to avoid compiler bombs
         Timeout.timeout(10) do
           puts "compile command:"
-          puts wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT)
+          puts wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT + memory_offset)
           # run the compilation in a sandbox for security reasons
-          cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT))
+          cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT + memory_offset))
           message, _, status = cr.finish
           puts "compile message:"
           puts message
@@ -145,9 +149,9 @@ class Submission < ApplicationRecord
         for input_file in test_data.keys.sort
           Timeout.timeout(time_limit + 5) do
             puts "run command:"
-            puts wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT)
+            puts wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT + memory_offset)
             # add a memory limit, a CPU limit, and a time limit
-            cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT))
+            cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT + memory_offset))
 
             File.open(input_file, "r") do |f|
               f.each_line do |line|
@@ -221,7 +225,7 @@ class Submission < ApplicationRecord
   private
 
   def wrap_sandbox(command, memory_limit)
-    return "(ulimit -Sv #{memory_limit} -Hv #{memory_limit}; cpulimit -l 50 -- #{command})"
+    return "(ulimit -Sv #{memory_limit} -Hv #{memory_limit}; cpulimit -l 50 -- bash #{command})"
   end
 end
 
