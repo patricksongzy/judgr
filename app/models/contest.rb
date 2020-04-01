@@ -49,7 +49,7 @@ class Contest < ApplicationRecord
 
     for problem in problems
       submission, _ = problem.get_score(user)
-      total_score += submission.score if submission
+      total_score += submission.score if submission and submission.score
       max_score += problem.get_max_score
     end
 

@@ -5,7 +5,6 @@ A Ruby on Rails online judge.
 * bubblewrap
 * cpulimit
 * libmagic
-* protobuf
 * bash, find, readlink, grep
 * gcc
 * Java
