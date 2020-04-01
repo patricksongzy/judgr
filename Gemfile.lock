@@ -87,6 +87,10 @@ GEM
     declarative (0.0.10)
     declarative-option (0.1.0)
     digest-crc (0.5.1)
+    dotenv (2.7.5)
+    dotenv-rails (2.7.5)
+      dotenv (= 2.7.5)
+      railties (>= 3.2, < 6.1)
     email_validator (2.0.1)
       activemodel
     erubi (1.9.0)
@@ -281,6 +285,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   clearance (~> 2.1)
+  dotenv-rails (~> 2.7)
   google-cloud-storage (~> 1.25)
   irb
   jbuilder (~> 2.7)

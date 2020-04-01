@@ -26,6 +26,6 @@ test:
 production:
   <<: *default
   database: judgr_production
-  url: <%= ENV['DATABASE_URL'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
   username: judgr
   password: <%= ENV['JUDGR_DATABASE_PASSWORD'] %>

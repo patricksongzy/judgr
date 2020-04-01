@@ -1,0 +1,11 @@
+/.git
+/log
+/node_modules
+/public/packs
+/public/packs-test
+/tmp
+/vendor/bundle
+/lib/bwrapper/*.sh
+/datasets
+/submissions
+/config/master.key

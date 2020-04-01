@@ -70,3 +70,7 @@ yarn-debug.log*
 /submissions/*
 /datasets/*
 /lib/bwrapper/*.sh
+
+/config/master.key
+# Contains secrets
+app.yaml

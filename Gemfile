@@ -63,3 +63,7 @@ gem 'rack-attack', '~>6.2'
 gem 'google-cloud-storage', '~>1.25', require: false
 
 gem 'ruby-filemagic'
+
+gem 'dotenv-rails', '~> 2.7'
+# gem 'grpc', '~> 1.28.0.pre2'
+# gem 'appengine', '~> 0.5.0'
