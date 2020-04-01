@@ -15,6 +15,8 @@ en:
     models:
       clearance_mailer:
         change_password: Change your password
+      user_mailer:
+        confirm_registration: Confirm your registration
   clearance_mailer:
     change_password:
       closing: If you didn't request this, ignore this email. Your password has
@@ -22,6 +24,11 @@ en:
       link_text: Change my password
       opening: "Someone, hopefully you, requested we send you a link to change
         your password:"
+  user_mailer:
+    confirm_registration:
+      opening: Thank you for signing up for Judgr! Confirm your account to get started.
+      link_text: Confirm your account
+      closing: By confirming your account, you agree to only use it for intended purposes.
   flashes:
     failure_after_create: Bad email or password.
     failure_after_update: Password can't be blank.

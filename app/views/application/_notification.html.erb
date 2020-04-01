@@ -1,0 +1,10 @@
+<% if flash[notification] %>
+  <div class="content notification <%= notification_class %>">
+    <b><%= t locale_prompt, count: Array(flash[notification]).length %></b>
+    <ul>
+      <% Array(flash[notification])&.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

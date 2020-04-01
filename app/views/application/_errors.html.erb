@@ -1,10 +1,1 @@
-<% if flash[error] %>
-  <div class="content notification is-danger">
-    <b><%= t locale_prompt, count: Array(flash[error]).length %></b>
-    <ul>
-      <% Array(flash[error])&.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= render partial: 'application/notification', locals: {notification: error, locale_prompt: locale_prompt, notification_class: "is-danger"} %>

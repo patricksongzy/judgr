@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   include Clearance::User
 
-  has_many :problems, dependent: :destroy
+  has_many :submissions, dependent: :destroy
 
   validates :full_name, presence: true
   validates :password_confirmation, presence: true, on: :create
@@ -11,5 +11,14 @@ class User < ApplicationRecord
   
   after_initialize do
     self.role ||= :default if self.new_record?
+  end
+
+  def confirm_email
+    self.email_confirmed_at = Time.current.to_i
+    save!
+  end
+
+  def confirmed?
+    self.email_confirmed_at.present?
   end
 end
