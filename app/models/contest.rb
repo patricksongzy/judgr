@@ -12,6 +12,15 @@ class Contest < ApplicationRecord
   before_save :set_dates
 
   ##
+  # Downloads problem datasets locally.
+  #
+  def prepare_problems
+    for problem in problems
+      problem.prepare_dataset
+    end
+  end
+
+  ##
   # Gets ancestors for the breadcrumb.
   #
   def get_ancestors(is_editing)

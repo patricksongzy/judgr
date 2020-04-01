@@ -9,6 +9,8 @@ class ContestsController < ApplicationController
     @contest = Contest.find(params[:id])
     authorize @contest
 
+    @contest.prepare_problems
+
     @submission = Submission.new
   end
 end
