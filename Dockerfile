@@ -24,7 +24,7 @@ RUN rm -rf $APP_DIR/node_modules
 RUN rm -rf $APP_DIR/tmp/*
 
 FROM ruby:slim
-RUN apt-get update && apt-get install -y bubblewrap cpulimit libpq-dev
+RUN apt-get update && apt-get install -y libmagic-dev bubblewrap cpulimit libpq-dev
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=build /app /app
