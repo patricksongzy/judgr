@@ -4,7 +4,7 @@ class UsersController < Clearance::UsersController
     @user.email_confirmation_token = Clearance::Token.new
 
     duplicate = User.where(email: @user.email).first
-    duplicate.destroy unless duplicate.confirmed?
+    duplicate.destroy unless duplicate.present? and duplicate.confirmed?
 
     if @user.save
       UserMailer.confirm_registration(@user).deliver_later
