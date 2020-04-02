@@ -33,6 +33,7 @@ EXPOSE 3000
 ENV RAILS_ENV=production
 ENV RAILS_SERVE_STATIC_FILES=true
 RUN ln -sf /proc/1/fd/1 /app/log/production.log
+RUN sysctl kernel.unprivileged_userns_clone=1
 RUN bundle config --local path vendor/bundle
 RUN bundle config --local without development:test:assets
 CMD bundle exec rails server
