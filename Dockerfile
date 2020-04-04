@@ -1,7 +1,5 @@
-FROM ruby:2.7.0 as build
-# get and install node
-# TODO upgrade, deprecated
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+FROM ruby:latest as build
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
 RUN apt-get install -y nodejs
 # get and install yarn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -15,7 +13,8 @@ RUN mkdir -p $APP_DIR
 WORKDIR $APP_DIR
 # put the Gemfiles
 ADD Gemfile Gemfile.lock $APP_DIR/
-RUN bundle install --deployment --jobs=4 --without development test
+RUN bundle config deployment without development test
+RUN bundle install --jobs=4
 ADD package.json yarn.lock $APP_DIR/
 RUN yarn install
 ADD . $APP_DIR
@@ -24,15 +23,15 @@ RUN SECRET_KEY_BASE=secret bundle exec rails assets:precompile
 RUN rm -rf $APP_DIR/node_modules
 RUN rm -rf $APP_DIR/tmp/*
 
-FROM ruby:2.7.0-slim
+FROM ruby:slim
 RUN apt-get update && apt-get install -y libmagic-dev bubblewrap cpulimit libpq-dev
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=build /app /app
-EXPOSE 3000
+EXPOSE 8000
 ENV RAILS_ENV=production
 ENV RAILS_SERVE_STATIC_FILES=true
 RUN ln -sf /proc/1/fd/1 /app/log/production.log
 RUN bundle config --local path vendor/bundle
 RUN bundle config --local without development:test:assets
-CMD bundle exec rails server
+CMD bundle exec rails server -p $PORT
