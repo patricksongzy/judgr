@@ -24,14 +24,16 @@ RUN rm -rf $APP_DIR/node_modules
 RUN rm -rf $APP_DIR/tmp/*
 
 FROM ruby:slim
-RUN apt-get update && apt-get install -y libmagic-dev bubblewrap cpulimit libpq-dev
+RUN apt-get update && apt-get install -y libmagic-dev bubblewrap cpulimit libpq-dev openssh-server
+RUN echo "root:Docker!" | chpasswd
 RUN mkdir -p /app
 WORKDIR /app
 COPY --from=build /app /app
-EXPOSE 8000
+COPY sshd_config /etc/ssh/
+EXPOSE 2222 8000
 ENV RAILS_ENV=production
 ENV RAILS_SERVE_STATIC_FILES=true
 RUN ln -sf /proc/1/fd/1 /app/log/production.log
 RUN bundle config --local path vendor/bundle
 RUN bundle config --local without development:test:assets
-CMD bundle exec rails server -p $PORT
+CMD service ssh restart && bundle exec rails server -p $PORT
