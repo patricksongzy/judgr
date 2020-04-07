@@ -4,9 +4,11 @@ class UsersController < Clearance::UsersController
     @user.email_confirmation_token = Clearance::Token.new
 
     duplicate = User.where(email: @user.email).first
-    duplicate.destroy unless duplicate.present? and duplicate.confirmed?
+    duplicate.destroy unless duplicate.nil? or duplicate.confirmed?
 
-    if @user.save
+    @user.verify_permitted
+
+    if @user.errors.empty? and @user.save
       UserMailer.confirm_registration(@user).deliver_later
       flash[:notice] = I18n.t('users.unconfirmed_message')
       redirect_back_or url_after_create
