@@ -111,7 +111,7 @@ class Submission < ApplicationRecord
       compile_command = "gcc -o #{sb_compiled_directory}Main.out #{sb_source_path}"
       run_command = "./#{sb_compiled_directory}Main.out"
     when "Python"
-      run_command = "python #{sb_source_path}"
+      run_command = "python3 #{sb_source_path}"
     end
 
     # ensure the language needs to be compiled
