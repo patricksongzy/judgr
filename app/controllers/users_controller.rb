@@ -10,10 +10,10 @@ class UsersController < Clearance::UsersController
 
     if @user.errors.empty? and @user.save
       UserMailer.confirm_registration(@user).deliver_later
-      flash[:notice] = I18n.t('users.unconfirmed_message')
-      redirect_back_or url_after_create
+      redirect_back fallback_location: url_after_create, flash: { notice: I18n.t('users.unconfirmed_message') }
     else
       flash[:alert] = @user.errors.full_messages
+      flash.keep
       render template: "users/new"
     end
   end
