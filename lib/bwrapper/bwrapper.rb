@@ -7,7 +7,7 @@ class BWrapper
     file_name = "lib/bwrapper/run_sandbox.sh"
     unless File.file?(file_name)
       wrapper = BWrapper.new(file_name, ["cairo", "gtk", "x11", "libgl", "site-packages"])
-      wrapper.wrap(["java", "javac", "gcc", "python", "as", "ld", "timeout"], library_directories: ["gcc", "python*"])
+      wrapper.wrap(["java", "javac", "gcc", "python3", "as", "ld", "timeout"], library_directories: ["gcc", "python*"])
     end
     
     cr = ConsoleRunner.new("chmod +x #{file_name}")

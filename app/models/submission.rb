@@ -119,22 +119,26 @@ class Submission < ApplicationRecord
       begin
         # set a timeout to avoid compiler bombs
         Timeout.timeout(10) do
-          puts "compile command:"
-          puts wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT + memory_offset)
+          Rails.logger.info "Compiling: #{wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT + memory_offset)}"
+
           # run the compilation in a sandbox for security reasons
           cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} '#{compile_command}' '#{submission_directory}'", COMPILE_MEMORY_LIMIT + memory_offset))
-          message, _, status = cr.finish
-          puts "compile message:"
-          puts message
+          message, error_text, status = cr.finish
+
+          Rails.logger.info "Message: #{message}."
 
           # ensure compilation is successful to proceed
           if not status.success?
+            Rails.logger.info "Error during compilation: #{error_text}"
+
             self.message = "Compilation error."
             return
           end
         end
       rescue Timeout::Error
+        Rails.logger.debug "Compilation time limit exceeded: killing sandbox."
         cr.kill
+
         self.message = "Compilation time limit exceeded."
         return
       end
@@ -148,8 +152,8 @@ class Submission < ApplicationRecord
       begin
         for input_file in test_data.keys.sort
           Timeout.timeout(time_limit + 5) do
-            puts "run command:"
-            puts wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT + memory_offset)
+            Rails.logger.info "Running: #{wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT + memory_offset)}"
+
             # add a memory limit, a CPU limit, and a time limit
             cr = ConsoleRunner.new(wrap_sandbox("#{bwrap_path} 'timeout #{time_limit} #{run_command}' '#{submission_directory}'", MEMORY_LIMIT + memory_offset))
 
@@ -160,16 +164,18 @@ class Submission < ApplicationRecord
             end
 
             output_text, error_text, status = cr.finish
-            puts "output:"
-            puts output_text
-            puts error_text
+            Rails.logger.info "Submission outputted: #{output_text}"
 
             if status.exitstatus == 124
+              Rails.logger.debug "Submission time limit exceeded: killing sandbox."
+
               self.message = "Time limit exceeded."
               return
             end
 
             if not status.success?
+              Rails.logger.info "Error running submission: #{error_text}"
+
               self.message = "Runtime error."
               return
             else
