@@ -7,7 +7,7 @@ class BWrapper
     file_name = "lib/bwrapper/run_sandbox.sh"
     unless File.file?(file_name)
       wrapper = BWrapper.new(file_name, ["cairo", "gtk", "x11", "libgl", "site-packages"])
-      wrapper.wrap(["java", "javac", "gcc", "python3", "as", "ld", "timeout"], library_directories: ["gcc", "python*"])
+      wrapper.wrap(["java", "javac", "gcc", "python3", "as", "ld", "timeout"], library_directories: ["gcc", "python*", "x86_64-linux-gnu"], custom_paths: ["/usr/lib/x86_64-linux-gnu", "/usr/lib64/ld-linux*"])
     end
     
     cr = ConsoleRunner.new("chmod +x #{file_name}")
@@ -23,7 +23,7 @@ class BWrapper
     @executable_paths = Set.new
   end
 
-  def wrap(command_names, library_directories: [])
+  def wrap(command_names, library_directories: [], custom_paths: [])
     @f.write("execution=$1\n")
     @f.write("path=$2\n")
     @f.write("clean_execution=${execution//[^a-zA-Z0-9\s.\/-]/}\n")
@@ -44,6 +44,10 @@ class BWrapper
     puts "Adding libraries..."
     for library in library_directories
       add_library_wildcard(library, true)
+    end
+
+    for path in custom_paths
+      add_custom_path(path)
     end
 
     write_argument("ro-bind", "/usr/include", "/usr/include")
@@ -141,6 +145,16 @@ class BWrapper
 
       link_directory = linked_location.match(/\/usr\/.*?\/[^\/]*/).to_s
       add_library_directory(link_directory)
+    end
+  end
+
+  def add_custom_path(path_wildcard)
+    cr = ConsoleRunner.new("find #{path_wildcard} -maxdepth 0 #{@blacklist_filters}")
+    paths, _, _ = cr.finish
+    paths = paths.split("\n")
+
+    for path in paths
+      write_argument("ro-bind", path, path)
     end
   end
 
@@ -242,8 +256,8 @@ class BWrapper
         puts "Skipping blacklisted library #{required}."
         next
       end
-
-      write_argument("ro-bind", required, required)
+ 
+      write_argument("ro-bind", required, required.sub(/^\/lib/, "/usr/lib"))
     end
   end
 end
