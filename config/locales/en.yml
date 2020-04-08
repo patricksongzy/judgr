@@ -124,7 +124,7 @@ en:
     suspended_message: Your account has been suspended for violations of policies and/or conditions regarding this system.
     confirmed_message: Your email has been verified.
     unconfirmed_message: Please verify your email before proceeding.
-    email_not_permitted: creation is currently restricted. Please contact the administrator to be authorized.
+    email_not_permitted: creation is currently restricted to known email addresses. Please contact the administrator to be authorized.
     actions:
       suspend: Suspend
       unsuspend: Unsuspend

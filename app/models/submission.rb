@@ -16,7 +16,7 @@ class Submission < ApplicationRecord
   # code file size limit in bytes
   CODE_SIZE_LIMIT = 128000
 
-  JAVA_ARGS = "-Xmx192m -XX:+UseCompressedClassPointers -XX:CompressedClassSpaceSize=32m -XX:MaxMetaspaceSize=32m"
+  JAVA_ARGS = "-Xmx512m -XX:+UseCompressedClassPointers -XX:CompressedClassSpaceSize=32m -XX:MaxMetaspaceSize=32m"
 
   ##
   # Gets the name of the submission.
@@ -231,7 +231,7 @@ class Submission < ApplicationRecord
   private
 
   def wrap_sandbox(command, memory_limit)
-    return "(ulimit -Sv #{memory_limit} -Hv #{memory_limit}; cpulimit -l 50 -- bash #{command})"
+    return "(ulimit -v #{memory_limit}; bash #{command})"
   end
 end
 
