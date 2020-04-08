@@ -5,7 +5,6 @@ A sandboxed Ruby on Rails online judge. Currently viewable at <https://www.judgr
 
 ## Dependencies
 * bubblewrap
-* cpulimit
 * libmagic
 * bash, find, readlink, grep
 * gcc
