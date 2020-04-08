@@ -183,7 +183,7 @@ class Submission < ApplicationRecord
 
               File.open(test_data[input_file], "r") do |f|
                 f.each_line.zip(output_text.each_line) do |target, output|
-                  unless target == output
+                  unless target.strip == output.strip
                     pass = false
                     break
                   end
