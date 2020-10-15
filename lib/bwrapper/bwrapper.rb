@@ -14,11 +14,11 @@ class BWrapper
     cr.finish
   end
 
-  def initialize(output_location, blacklisted_names)
+  def initialize(output_location, blocklisted_names)
     puts "Generating shell script..."
     @f = File.open(output_location, "w")
-    @blacklisted_names = blacklisted_names
-    @blacklist_filters = get_blacklist_filters(blacklisted_names)
+    @blocklisted_names = blocklisted_names
+    @blocklist_filters = get_blocklist_filters(blocklisted_names)
     @visited_libraries = Set.new
     @executable_paths = Set.new
   end
@@ -101,23 +101,23 @@ class BWrapper
     end
   end
 
-  def get_blacklist_filters(blacklisted_names)
-    blacklist_filters = ""
-    for blacklisted in blacklisted_names
-      blacklist_filters += "| grep -iv #{blacklisted} "
+  def get_blocklist_filters(blocklisted_names)
+    blocklist_filters = ""
+    for blocklisted in blocklisted_names
+      blocklist_filters += "| grep -iv #{blocklisted} "
     end
     
-    blacklist_filters
+    blocklist_filters
   end
 
   ##
-  # Finds executables in a specefied library directory, wiht a blacklist.
+  # Finds executables in a specefied library directory, wiht a blocklist.
   #
   def find_executables(library_path)
     library_path = library_path.chomp('/')
 
     # globstar is needed for double asterix wildcard
-    cr = ConsoleRunner.new("shopt -s globstar && find #{library_path}/**/ executable -type f #{@blacklist_filters}")
+    cr = ConsoleRunner.new("shopt -s globstar && find #{library_path}/**/ executable -type f #{@blocklist_filters}")
     executable_paths, _, _ = cr.finish
     executable_paths.split("\n")
   end
@@ -149,7 +149,7 @@ class BWrapper
   end
 
   def add_custom_path(path_wildcard)
-    cr = ConsoleRunner.new("find #{path_wildcard} -maxdepth 0 #{@blacklist_filters}")
+    cr = ConsoleRunner.new("find #{path_wildcard} -maxdepth 0 #{@blocklist_filters}")
     paths, _, _ = cr.finish
     paths = paths.split("\n")
 
@@ -159,7 +159,7 @@ class BWrapper
   end
 
   def add_library_wildcard(library_wildcard, is_directory)
-    cr = ConsoleRunner.new("find /usr/lib/#{library_wildcard} -maxdepth 0 #{is_directory ? '-type d' : ''} #{@blacklist_filters}")
+    cr = ConsoleRunner.new("find /usr/lib/#{library_wildcard} -maxdepth 0 #{is_directory ? '-type d' : ''} #{@blocklist_filters}")
     paths, _, _ = cr.finish
     paths = paths.split("\n")
 
@@ -174,9 +174,9 @@ class BWrapper
     end
   end
 
-  def blacklist_subdirectories(directory_path)
-    for blacklisted in @blacklisted_names
-      cr = ConsoleRunner.new("find #{directory_path}/*#{blacklisted}* -maxdepth 0 -type d")
+  def blocklist_subdirectories(directory_path)
+    for blocklisted in @blocklisted_names
+      cr = ConsoleRunner.new("find #{directory_path}/*#{blocklisted}* -maxdepth 0 -type d")
       results, _, _ = cr.finish
       if not results.empty?
         for result in results.split("\n")
@@ -192,10 +192,10 @@ class BWrapper
       write_argument("ro-bind", directory_path, directory_path)
 
       add_links(directory_path)
-      # blacklist subdirectories read-only binding a directory will provide read-only access to them
-      blacklist_subdirectories(directory_path)
+      # blocklist subdirectories read-only binding a directory will provide read-only access to them
+      blocklist_subdirectories(directory_path)
 
-      # blacklisted executables and subdirectories are removed through grep
+      # blocklisted executables and subdirectories are removed through grep
       @executable_paths += find_executables(directory_path).map do |executable|
         get_linked_location(executable)
       end
@@ -207,7 +207,7 @@ class BWrapper
   #
   def find_links(directory_path)
     directory_path = directory_path.chomp('/')
-    cr = ConsoleRunner.new("find #{directory_path}/ -type l #{@blacklist_filters}")
+    cr = ConsoleRunner.new("find #{directory_path}/ -type l #{@blocklist_filters}")
     links, _, _ = cr.finish
     links.split("\n")
   end
@@ -218,7 +218,7 @@ class BWrapper
   def add_links(directory_path)
     links = find_links(directory_path)
     for link in links
-      linked_location = get_linked_location(link, arguments: "| grep -v #{directory_path} #{@blacklist_filters}")
+      linked_location = get_linked_location(link, arguments: "| grep -v #{directory_path} #{@blocklist_filters}")
       if linked_location.empty?
         next
       end
@@ -252,8 +252,8 @@ class BWrapper
     required_libraries = get_required_libraries
 
     for required in required_libraries
-      if @blacklisted_names.any? { |blacklisted| required.downcase.include?(blacklisted) == 0 }
-        puts "Skipping blacklisted library #{required}."
+      if @blocklisted_names.any? { |blocklisted| required.downcase.include?(blocklisted) == 0 }
+        puts "Skipping blocklisted library #{required}."
         next
       end
  
