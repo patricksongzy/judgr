@@ -1,5 +1,5 @@
 # Judgr
-A sandboxed Ruby on Rails online judge.
+A sandboxed Ruby on Rails online judge. Note: uses the Bulma theme!
 
 ![Judgr App screenshot](https://raw.githubusercontent.com/patricksongzy/judgr/master/images/judgr.png)
 
