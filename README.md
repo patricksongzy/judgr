@@ -17,7 +17,7 @@ GOOGLE_APPLICATION_CREDENTIALS
 HOST_NAME
 ```
 
-If the judge will be run for private competitions, to avoid abuse, a whitelist environment variable can be specified as `JUDGR_EMAILS`.
+If the judge will be run for private competitions, to avoid abuse, an allowlist environment variable can be specified as `JUDGR_EMAILS`.
 Only whiltelisted emails will then be able to sign up.
 
 Obtain a certificate from Let's Encrypt to begin.
